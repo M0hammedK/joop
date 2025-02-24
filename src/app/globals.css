@@ -2,20 +2,49 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Center everything on screen */
+html, body {
+    @apply items-center ;
+    margin: 0;
+    padding: 0;
+    height: 100%;
   }
-}
-
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-}
+  html{
+    margin: 0;
+    
+  }
+  
+  /* Center container and ensure responsive width */
+  .my-container {
+    @apply items-center justify-self-center;
+    width: 100%; /* Use viewport width */
+  }
+  
+  /* Ensure section is centered and responsive */
+  section {
+    @apply flex items-center justify-center w-full;
+    max-width: 1200px;
+  }
+  
+  /* Ensure divs are flex-based for centering */
+  div {
+    @apply flex items-center justify-center;
+  }
+  
+  /* Typography */
+  h1, h2 {
+    @apply text-xl md:text-3xl font-bold;
+  }
+  
+  h3, h4 {
+    @apply text-lg md:text-xl font-semibold;
+  }
+  
+  h5, h6, p {
+    @apply text-base;
+  }
+  
+  .image{
+    @apply rounded-full bg-black
+  }
+  
