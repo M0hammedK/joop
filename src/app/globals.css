@@ -45,6 +45,6 @@ html, body {
   }
   
   .image{
-    @apply rounded-full bg-black
+    @apply rounded-full bg-black w-28 h-28
   }
   

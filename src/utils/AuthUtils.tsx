@@ -1,0 +1,17 @@
+import RegisterSchema, { userRoleEnum } from "@/models/registerSchema";
+
+export const checkRegiterCredentials = (
+  data: any
+): string | string[] | null => {
+  const { password, repeatPassword, role }: any = data;
+  if (password !== repeatPassword) return "the passwoeds not match";
+  if (!userRoleEnum.includes(role)) return "the role not correct";
+
+  const { repeatPassword: repeat, ...rest }: any = data;
+  const validateRegister = RegisterSchema.validate({
+    ...rest,
+    imagePath: "/file.svg",
+  });
+  if (validateRegister) return validateRegister;
+  return null;
+};

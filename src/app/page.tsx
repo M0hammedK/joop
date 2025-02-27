@@ -1,10 +1,10 @@
 import Link from "next/link";
-import JobCard from "./components/JobCard";
+import JobCard from "./components/UI/JobCard";
 
 export default function Home() {
   return (
     <section className="p-6 flex flex-col w-full">
-      <div className="mt-6 p-6 bg-gradient-to-br from-blue-500 to-blue-300 w-full rounded-3xl text-white justify-between item">
+      <div className="flex-col sm:flex-row mt-6 p-6 bg-gradient-to-br from-blue-500 to-blue-300 w-full rounded-3xl text-white justify-between item">
         <h1 className="text-3xl font-bold text-start">Welcome to JooP</h1>{" "}
         <h3>Your Platform for Finding Jobs</h3>
         <div className="mt-6 flex gap-3 justify-center">

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Navbar from "./components/Navbar";
+import Navbar from "./components/UI/Navbar";
+import UserProvider from "./components/globalStates/UserContext";
 
 export const metadata: Metadata = {
   title: "JooP website",
@@ -15,10 +16,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="grid grid-cols-[10%_90%] md:grid-cols-[30%_70%] lg:grid-cols-[20%_80%] my-container">
-        <div>
-          <Navbar />
-        </div>
-        <main className="flex flex-col w-full h-full">{children}</main>
+        <UserProvider>
+          <div>
+            <Navbar />
+          </div>
+          <main className="flex flex-col w-full h-full">{children}</main>
+        </UserProvider>
       </body>
     </html>
   );

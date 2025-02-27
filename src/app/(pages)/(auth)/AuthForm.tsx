@@ -1,47 +1,67 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface Props {
   type: string;
-  onSubmit: (data: any) => void;
+  onSubmit: (
+    e: React.FormEvent<HTMLFormElement>,
+    { email, password, repeatPassword, name, role }: any,
+    image: Blob | null
+  ) => void;
 }
 
 export default function AuthForm({ type, onSubmit }: Props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [username, setUsername] = useState("");
-  const [image, setImage] = useState(null);
+  const [role, setRole] = useState("");
+  const [name, setName] = useState("");
+  const [image, setImage] = useState<Blob | null>(null);
+  const [preview, setPreviw] = useState<string>("/file.svg");
   const [repeatPassword, setRepeatPassword] = useState("");
 
-  const handleSubmit = (e: any) => {
-    e.preventDefault();
-    if (type === "register" && password !== repeatPassword) {
-      alert("Passwords do not match!");
-      return;
-    }
-    if (password.length < 8) {
-      alert("Passwords must be at least 8 characters!");
-      return;
-    }
-    onSubmit({ email, password, username, image });
-  };
-
+  useEffect(() => {
+    const getImage = async () => {
+      const defualtImageUrl = URL.createObjectURL(image as Blob);
+      setPreviw(defualtImageUrl);
+    };
+    if (image !== null) getImage();
+  }, [image]);
   return (
-    <form onSubmit={handleSubmit} className=" w-full">
+    <form
+      onSubmit={(e: React.FormEvent<HTMLFormElement>) =>
+        onSubmit(
+          e,
+          {
+            email,
+            password,
+            repeatPassword,
+            name,
+            role: role.toUpperCase(),
+          },
+          image
+        )
+      }
+      className=" w-full"
+    >
       {type === "register" && (
         <div className="mb-4">
           <label htmlFor="profileImage" className="cursor-pointer">
             <Image
-              src="/file.svg"
+              src={preview}
               alt="Profile Picture"
               width={120}
               height={120}
               className="image"
             />
           </label>
-          <input id="profileImage" type="file" className="hidden" />
+          <input
+            id="profileImage"
+            type="file"
+            className="hidden"
+            onChange={(e: any) => setImage(e.target.files?.[0])}
+          />
         </div>
       )}
       {type === "register" && (
@@ -49,8 +69,8 @@ export default function AuthForm({ type, onSubmit }: Props) {
           <label className="block text-gray-700 w-24">Username</label>
           <input
             type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
             className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Enter username"
             required
@@ -90,6 +110,15 @@ export default function AuthForm({ type, onSubmit }: Props) {
             className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             required
           />
+        </div>
+      )}
+      {type === "register" && (
+        <div className="mb-4">
+          <label className="block text-gray-700 w-24">Role</label>
+          <select className="w-full" onChange={(e) => setRole(e.target.value)}>
+            <option>Job Sekeer</option>
+            <option>Employer</option>
+          </select>
         </div>
       )}
       <button
