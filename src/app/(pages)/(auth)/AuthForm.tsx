@@ -70,6 +70,7 @@ export default function AuthForm({ type, onSubmit }: Props) {
         <div className="mb-4">
           <label className="block text-gray-700 w-24">Username</label>
           <input
+          name="name"
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -107,7 +108,7 @@ export default function AuthForm({ type, onSubmit }: Props) {
         <div className="mb-4">
           <label className="block text-gray-700 w-24">Repeat Password</label>
           <input
-
+            name="repeatPassword"
             type="password"
             placeholder="Enter Password again"
             value={repeatPassword}
