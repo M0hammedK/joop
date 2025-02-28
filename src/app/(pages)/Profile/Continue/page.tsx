@@ -29,27 +29,41 @@ export default function ContinueProfile() {
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+    e.preventDefault(); // Ensure default form submission is prevented
     setError(null);
-    const { resume, skills, ...rest } = formData;
+  
     if (user?.role === "JOB_SEEKER") {
-      if (!resume) return setError("you have to upload resume");
-      uploadImage(resume, user.email, "resume").then((res) => {
-        const jobSeeker = { ...user, resume: res, skills };
-        console.log(jobSeeker)
+      if (!formData.resume) {
+        setError("You have to upload a resume");
+        return;
+      }
+  
+      try {
+        const resumeUrl = await uploadImage(formData.resume, user.email, "resume"); // Await file upload
+        const jobSeeker = { ...user, resume: resumeUrl, skills: formData.skills };
+  
         const jobSeekerValidate = JobSekeerSchema.validate(jobSeeker);
-        if (!jobSeekerValidate) setUser(new JobSekeerSchema(jobSeeker));
-        else setError(jobSeekerValidate);
-      });
-    } else {
-      if (user?.role === "EMPLOYER") {
-        const employer = { ...user, rest };
-        const employerValidate = EmployerSchema.validate(employer);
-        if (!employerValidate) setUser(new EmployerSchema(employer));
-        else setError(employerValidate);
+        console.error(jobSeekerValidate);
+        if (!jobSeekerValidate) {
+          setUser(new JobSekeerSchema(jobSeeker));
+        } else {
+          setError(jobSeekerValidate);
+        }
+      } catch (error) {
+        setError("Failed to upload resume");
+      }
+    } else if (user?.role === "EMPLOYER") {
+      const employer = { ...user, ...formData };
+      const employerValidate = EmployerSchema.validate(employer);
+  
+      if (!employerValidate) {
+        setUser(new EmployerSchema(employer));
+      } else {
+        setError(employerValidate);
       }
     }
   };
+  
 
   return (
     <div className="flex flex-col max-w-lg mx-auto p-6 bg-white shadow-md rounded-xl mt-10">

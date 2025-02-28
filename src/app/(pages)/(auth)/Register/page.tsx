@@ -22,7 +22,7 @@ export default function RegisterPage() {
     const registerValidate = checkRegiterCredentials(data);
     if (!registerValidate) {
       uploadImage(image, data["email"], 'image').then((res) => {
-        if (res.split("/").length === 3) {
+        if (res.split("/").length === 4) {
           console.log("1");
           const { repeatPassword, ...rest } = data;
           Register({ ...rest, imagePath: res })
