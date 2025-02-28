@@ -1,7 +1,6 @@
 import LoginSchema from "@/models/loginSchema";
 import RegisterSchema from "@/models/registerSchema";
 import axios from "axios";
-import { error } from "console";
 
 export const Login = async (user: any) => {
   let response: any;
@@ -23,7 +22,6 @@ export const Login = async (user: any) => {
 };
 
 export const Register = async (user: object) => {
-  console.log('2');
   let response: any;
   await axios
     .post("/api/register", user, {
@@ -32,7 +30,6 @@ export const Register = async (user: object) => {
       },
     })
     .then((res) => {
-      console.log('2.5')
       response = res.data;
     })
     .catch((error) => {

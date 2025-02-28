@@ -7,9 +7,7 @@ export const userRegisterSharedSchema = z.object({
   name: z.string().min(1, "Name is required"),
   email: z.string().email("Invalid email format"),
   password: z.string().min(6, "Password must be at least 6 characters"),
-  role: z.enum(userRoleEnum).refine((val) => userRoleEnum.includes(val), {
-    message: "Invalid role value",
-  }),
+  role: z.enum(userRoleEnum),
   imagePath: z.string(),
 });
 abstract class UserRegisterSharedSchema {
@@ -27,7 +25,7 @@ abstract class UserRegisterSharedSchema {
     this.password = parsed.password;
     this.email = parsed.email;
     this.role = parsed.role;
-    this.imagePath = parsed.imagePath;
+    this.imagePath = parsed.imagePath
   }
 
   static validate(data: any): string[] | null {

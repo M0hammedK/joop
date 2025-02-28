@@ -1,13 +1,11 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
+import { useState } from "react";
 import { useUser } from "../../../components/contexts/UserContext";
-import { useRouter } from "next/router";
 import JobSekeerSchema from "@/models/jobSekeerSchema";
-import UserSchema from "@/models/userSchema";
-import { UploadImage } from "@/server/File";
 import { uploadImage } from "@/app/services/FileSrevices";
 import EmployerSchema from "@/models/employerSchema";
+import { redirect } from "next/navigation";
 
 export default function ContinueProfile() {
   const { user, setUser } = useUser(); // Assuming user is stored in context
@@ -31,31 +29,31 @@ export default function ContinueProfile() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault(); // Ensure default form submission is prevented
     setError(null);
-  
+
     if (user?.role === "JOB_SEEKER") {
       if (!formData.resume) {
         setError("You have to upload a resume");
         return;
       }
-  
+
       try {
-        const resumeUrl = await uploadImage(formData.resume, user.email, "resume"); // Await file upload
-        const jobSeeker = { ...user, resume: resumeUrl, skills: formData.skills };
-  
-        const jobSeekerValidate = JobSekeerSchema.validate(jobSeeker);
-        console.error(jobSeekerValidate);
-        if (!jobSeekerValidate) {
+        await uploadImage(formData.resume, user.email, "resume").then((res) => {
+          const jobSeeker = {
+            ...user,
+            resume: res,
+            skills: formData.skills,
+          };
+
           setUser(new JobSekeerSchema(jobSeeker));
-        } else {
-          setError(jobSeekerValidate);
-        }
+          return redirect("/");
+        }); // Await file upload
       } catch (error) {
         setError("Failed to upload resume");
       }
     } else if (user?.role === "EMPLOYER") {
       const employer = { ...user, ...formData };
       const employerValidate = EmployerSchema.validate(employer);
-  
+
       if (!employerValidate) {
         setUser(new EmployerSchema(employer));
       } else {
@@ -63,7 +61,6 @@ export default function ContinueProfile() {
       }
     }
   };
-  
 
   return (
     <div className="flex flex-col max-w-lg mx-auto p-6 bg-white shadow-md rounded-xl mt-10">

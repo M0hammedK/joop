@@ -28,11 +28,9 @@ export const Register = async (user: any): Promise<any | string> => {
       },
     })
     .then((res: any) => {
-      console.log(res);
       response = res.data;
     })
     .catch((err: any) => {
-      console.log(err);
       response = err.message;
     });
   return response!;

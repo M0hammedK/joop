@@ -23,11 +23,9 @@ export default function RegisterPage() {
     if (!registerValidate) {
       uploadImage(image, data["email"], 'image').then((res) => {
         if (res.split("/").length === 4) {
-          console.log("1");
           const { repeatPassword, ...rest } = data;
           Register({ ...rest, imagePath: res })
             .then((res) => {
-              console.log("4");
               const registerValidate = RegisterSchema.validate(res);
               if (!registerValidate) return router.push("/Login");
               setError(registerValidate);

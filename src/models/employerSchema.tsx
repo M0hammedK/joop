@@ -12,15 +12,14 @@ class EmployerSchema extends UserSchema {
   public companyWebsite?: string;
 
   constructor(data: any) {
-    const { name, email, password, role } = data;
-    const { companyWebsite, companyName } = data;
-    super({ name, email, password, role });
+    const { companyWebsite, companyName, ...rest } = data;
+    super(rest);
     const parsed = employerSchema.parse({ companyWebsite, companyName });
     this.companyName = parsed.companyName;
     this.companyWebsite = parsed.companyWebsite;
   }
 
-  static validate(data: any) {
+  static validate(data: any): string[] | null {
     const validate = employerSchema.safeParse(data);
     if (validate.success) return null;
     return validate.error.errors.map((err) => err.message) as string[];
