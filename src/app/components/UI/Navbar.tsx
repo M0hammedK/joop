@@ -40,7 +40,7 @@ export default function Navbar() {
         {/* Profile Section */}
         <div className="flex flex-col items-center">
           <Image
-            src="/file.svg"
+            src="/uploads/images/defaultImage.svg"
             alt="Profile Picture"
             width={100}
             height={100}
@@ -62,7 +62,12 @@ export default function Navbar() {
                 key={label}
                 className="p-3 hover:bg-selected transition hover:shadow-xl"
               >
-                <Link href={path} onClick={() => {window.screen.width < 640 && setIsOpen(false)}}>
+                <Link
+                  href={path}
+                  onClick={() => {
+                    window.screen.width < 640 && setIsOpen(false);
+                  }}
+                >
                   <h3>{label}</h3>
                 </Link>
               </li>
@@ -77,7 +82,12 @@ export default function Navbar() {
                 key={label}
                 className="p-3 hover:bg-selected transition hover:shadow-xl"
               >
-                <Link href={path} onClick={() => {window.screen.width < 640 && setIsOpen(false)}}>
+                <Link
+                  href={path}
+                  onClick={() => {
+                    window.screen.width < 640 && setIsOpen(false);
+                  }}
+                >
                   <h3>{label}</h3>
                 </Link>
               </li>

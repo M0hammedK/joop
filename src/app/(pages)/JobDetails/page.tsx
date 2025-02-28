@@ -12,7 +12,7 @@ export default function JobDetails() {
       </div>
       <div className="flex-col items-center text-center row-span-1 col-span-2">
         <Image
-          src="/file.svg"
+          src="/uploads/images/defaultImage.svg"
           alt="Company Logo"
           width={100}
           height={100}

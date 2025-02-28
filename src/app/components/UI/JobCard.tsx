@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import ApplyButton from "./ApplyButton";
 
 export default function JobCard() {
   return (
@@ -7,10 +8,10 @@ export default function JobCard() {
       <div className="grid grid-cols-[30%_70%]">
         <div className="justify-normal flex flex-col">
           <Image
-            src={"/file.svg"}
+            src={"/uploads/images/defaultImage.svg"}
             alt="company"
-            width={100}
-            height={100}
+            width={200}
+            height={200}
             className="image"
           />
           <h3>Company Name</h3>
@@ -25,10 +26,15 @@ export default function JobCard() {
           </ol>
         </div>
       </div>
-        <div className="w-full flex justify-between gap-1 mt-2 p-2 text-center">
-          <Link href={'/JobDetails'} className="w-full bg-blue-600 rounded-s-md text-slate-100 hover:text-blue-600 hover:bg-slate-100">Read More...</Link>
-          <Link href={'#'} className="w-full bg-blue-600 rounded-e-md text-slate-100 hover:text-blue-600 hover:bg-slate-100">Apply Now!</Link>
-        </div>
+      <div className="w-full flex justify-between gap-1 mt-2 p-2 text-center">
+        <Link
+          href={"/JobDetails"}
+          className="w-full bg-blue-600 text-slate-100 hover:text-blue-600 hover:bg-slate-100"
+        >
+          Read More...
+        </Link>
+        <ApplyButton />
+      </div>
     </div>
   );
 }

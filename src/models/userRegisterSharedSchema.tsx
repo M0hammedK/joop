@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const userRoleEnum = ["JOB SEEKER", "EMPLOYER"] as const;
+export const userRoleEnum = ["JOB_SEEKER", "EMPLOYER"] as const;
 
 export const userRegisterSharedSchema = z.object({
   id: z.number().optional(),

@@ -1,4 +1,4 @@
-import { UploadImage } from "@/server/Image";
+import { UploadImage } from "@/server/File";
 import { NextResponse } from "next/server";
 
 export const config = {
@@ -8,11 +8,13 @@ export const config = {
 };
 
 export const POST = async (req: Request) => {
+  let response;
   await UploadImage(req)
     .then((res) => {
-      return NextResponse.json(res);
+      response = res;
     })
     .catch((err) => {
-      return NextResponse.json(err);
+      response = err;
     });
+  return NextResponse.json(response);
 };

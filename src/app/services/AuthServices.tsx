@@ -1,6 +1,7 @@
 import LoginSchema from "@/models/loginSchema";
 import RegisterSchema from "@/models/registerSchema";
 import axios from "axios";
+import { error } from "console";
 
 export const Login = async (user: any) => {
   let response: any;
@@ -11,7 +12,7 @@ export const Login = async (user: any) => {
       },
     })
     .then((res: any) => {
-      if ((res.data === "Invalid User")) return (response = res.data);
+      if (res.data === "Invalid User") return (response = res.data);      
       response = res.data["data"];
       localStorage.setItem("Token", res.data["token"]);
     })
@@ -21,7 +22,8 @@ export const Login = async (user: any) => {
   return response;
 };
 
-export const Register = async (user: any) => {
+export const Register = async (user: object) => {
+  console.log('2');
   let response: any;
   await axios
     .post("/api/register", user, {
@@ -30,10 +32,11 @@ export const Register = async (user: any) => {
       },
     })
     .then((res) => {
+      console.log('2.5')
       response = res.data;
     })
     .catch((error) => {
-      throw new Error(error.message);
+      response = error
     });
   return response;
 };

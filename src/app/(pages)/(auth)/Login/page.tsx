@@ -25,11 +25,27 @@ export default function LoginPage() {
     if (loginValidate) setError(loginValidate);
     else {
       Login(newData).then((res) => {
-        const userValidation = UserSchema.validate(res);
-        if (!userValidation) {
-          setUser(new JobSekeerSchema(res));
-          return router.push("/Profile/Continue");
-        } else setError(res);
+        if (res["role"])
+          switch (res["role"]) {
+            case "JOB_SEEKER":
+              if (!JobSekeerSchema.validate(res)) {
+                setUser(new JobSekeerSchema(res));
+                return router.push("/");
+              }
+              setUser(new UserSchema(res));
+              return router.push("/Profile/Continue");
+
+            case "EMPLOYER":
+              if (!EmployerSchema.validate(res)) {
+                setUser(new EmployerSchema(res));
+                return router.push("/");
+              }
+              setUser(new UserSchema(res));
+              return router.push("/Profile/Continue");
+            default:
+              setError(res);
+              break;
+          }
       });
     }
   };

@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import RegisterSchema from "@/models/registerSchema";
 import { Register } from "@/app/services/AuthServices";
 import { checkRegiterCredentials } from "@/utils/AuthUtils";
-import { tryUploadImage } from "@/app/services/ImageSrevices";
+import { uploadImage } from "@/app/services/FileSrevices";
 
 export default function RegisterPage() {
   const [error, setError] = useState<string[] | null | string>(null);
@@ -21,10 +21,13 @@ export default function RegisterPage() {
     setError(null);
     const registerValidate = checkRegiterCredentials(data);
     if (!registerValidate) {
-      tryUploadImage(image, data["email"]).then((res) => {
-        if (res.includes("/Images/")) {
-          Register({ ...data, imagePath: res })
+      uploadImage(image, data["email"], 'image').then((res) => {
+        if (res.split("/").length === 3) {
+          console.log("1");
+          const { repeatPassword, ...rest } = data;
+          Register({ ...rest, imagePath: res })
             .then((res) => {
+              console.log("4");
               const registerValidate = RegisterSchema.validate(res);
               if (!registerValidate) return router.push("/Login");
               setError(registerValidate);

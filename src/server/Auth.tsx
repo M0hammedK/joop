@@ -19,7 +19,7 @@ export const Login = async (user: any): Promise<any | string> => {
   return response!;
 };
 
-export const Register = async (user: UserSchema): Promise<any | string> => {
+export const Register = async (user: any): Promise<any | string> => {
   let response: any | string;
   await axios
     .post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/signup`, user, {
@@ -28,10 +28,12 @@ export const Register = async (user: UserSchema): Promise<any | string> => {
       },
     })
     .then((res: any) => {
+      console.log(res);
       response = res.data;
     })
     .catch((err: any) => {
-      response = err.message as string;
+      console.log(err);
+      response = err.message;
     });
   return response!;
 };

@@ -2,8 +2,6 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import defualtImage from"/src/Images/file.svg"
-
 interface Props {
   type: string;
   onSubmit: (
@@ -19,7 +17,9 @@ export default function AuthForm({ type, onSubmit }: Props) {
   const [role, setRole] = useState("Job Seeker");
   const [name, setName] = useState("");
   const [image, setImage] = useState<Blob | null>(null);
-  const [preview, setPreviw] = useState<string>(defualtImage);
+  const [preview, setPreviw] = useState<string>(
+    "/uploads/images/defaultImage.svg"
+  );
   const [repeatPassword, setRepeatPassword] = useState("");
 
   useEffect(() => {
@@ -39,7 +39,7 @@ export default function AuthForm({ type, onSubmit }: Props) {
             password,
             repeatPassword,
             name,
-            role: role.toUpperCase(),
+            role: role.toUpperCase().replace(" ", "_"),
           },
           image
         )
@@ -60,6 +60,7 @@ export default function AuthForm({ type, onSubmit }: Props) {
           <input
             id="profileImage"
             type="file"
+            accept=".png,.jpg,.jpeg,.svg"
             className="hidden"
             onChange={(e: any) => setImage(e.target.files?.[0])}
           />
@@ -116,7 +117,11 @@ export default function AuthForm({ type, onSubmit }: Props) {
       {type === "register" && (
         <div className="mb-4">
           <label className="block text-gray-700 w-24">Role</label>
-          <select className="w-full" value={role} onChange={(e) => setRole(e.target.value)}>
+          <select
+            className="w-full"
+            value={role}
+            onChange={(e) => setRole(e.target.value)}
+          >
             <option>Job Seeker</option>
             <option>Employer</option>
           </select>

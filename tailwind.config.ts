@@ -11,6 +11,9 @@ export default {
       backgroundColor: {
         selected: "rgb(47 109 245 / var(--tw-bg-opacity, 1))",
       },
+      screens:{
+        sm:"770px"
+      }
     },
   },
   plugins: [],
