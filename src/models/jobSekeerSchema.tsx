@@ -1,12 +1,13 @@
 import { z } from "zod";
-import RegisterSchema, { registerSchema } from "./registerSchema";
+import UserSchema from "./userSchema";
+import {userRegisterSharedSchema} from "./userRegisterSharedSchema";
 
-const jobSekeerSchema = registerSchema.extend({
+const jobSekeerSchema = userRegisterSharedSchema.extend({
   resume: z.string().min(1, "Resume is required"),
   skills: z.string().min(1, "").optional(),
 });
 
-class JobSekeerSchema extends RegisterSchema {
+class JobSekeerSchema extends UserSchema {
   public resume: string;
   public skills?: string;
 

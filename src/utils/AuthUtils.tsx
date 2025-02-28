@@ -1,4 +1,4 @@
-import RegisterSchema, { userRoleEnum } from "@/models/registerSchema";
+import RegisterSchema, { userRoleEnum } from "@/models/userRegisterSharedSchema";
 
 export const checkRegiterCredentials = (
   data: any
@@ -10,7 +10,7 @@ export const checkRegiterCredentials = (
   const { repeatPassword: repeat, ...rest }: any = data;
   const validateRegister = RegisterSchema.validate({
     ...rest,
-    imagePath: "/file.svg",
+    imagePath: "/src/Images/file.svg",
   });
   if (validateRegister) return validateRegister;
   return null;

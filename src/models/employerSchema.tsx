@@ -1,12 +1,13 @@
 import { z } from "zod";
-import RegisterSchema, { registerSchema } from "./registerSchema";
+import { userRegisterSharedSchema } from "./userRegisterSharedSchema";
+import UserSchema from "./userSchema";
 
-const employerSchema = registerSchema.extend({
+const employerSchema = userRegisterSharedSchema.extend({
   companyName: z.string().min(1, "Company name is required"),
   companyWebsite: z.string().url("Invalid URL").optional(),
 });
 
-class EmployerSchema extends RegisterSchema {
+class EmployerSchema extends UserSchema {
   public companyName: string;
   public companyWebsite?: string;
 

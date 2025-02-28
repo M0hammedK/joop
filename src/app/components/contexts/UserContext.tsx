@@ -2,11 +2,12 @@
 
 import EmployerSchema from "@/models/employerSchema";
 import JobSekeerSchema from "@/models/jobSekeerSchema";
+import UserSchema from "@/models/userSchema";
 import { useState, createContext, useContext } from "react";
 
 interface UserContextType {
-  user: JobSekeerSchema | EmployerSchema | null;
-  setUser: (user: JobSekeerSchema | EmployerSchema | null) => void;
+  user: UserSchema | JobSekeerSchema | EmployerSchema | null;
+  setUser: (user: UserSchema |JobSekeerSchema | EmployerSchema | null) => void;
 }
 
 export const userContext = createContext<UserContextType | undefined>(
@@ -18,7 +19,7 @@ export default function UserProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [user, setUser] = useState<JobSekeerSchema | EmployerSchema | null>(null);
+  const [user, setUser] = useState<UserSchema| JobSekeerSchema | EmployerSchema | null>(null);
 
   return (
     <userContext.Provider value={{ user, setUser }}>

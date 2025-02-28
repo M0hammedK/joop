@@ -24,10 +24,10 @@ export default function RegisterPage() {
       tryUploadImage(image, data["email"]).then((res) => {
         if (res.includes("/Images/")) {
           Register({ ...data, imagePath: res })
-          .then((res) => {
-              if (res) {
-                return router.push("/Login");
-              }
+            .then((res) => {
+              const registerValidate = RegisterSchema.validate(res);
+              if (!registerValidate) return router.push("/Login");
+              setError(registerValidate);
             })
             .catch((err) => {
               setError(err);
@@ -35,7 +35,7 @@ export default function RegisterPage() {
         } else setError(res);
       });
     }
-    setError(registerValidate)
+    setError(registerValidate);
   };
 
   return (

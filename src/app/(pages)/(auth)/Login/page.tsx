@@ -6,8 +6,10 @@ import { Login } from "../../../services/AuthServices";
 import { useState } from "react";
 import EmployerSchema from "@/models/employerSchema";
 import JobSekeerSchema from "@/models/jobSekeerSchema";
-import { useUser } from "@/app/components/globalStates/UserContext";
+import { useUser } from "@/app/components/contexts/UserContext";
 import { useRouter } from "next/navigation";
+import RegisterSchema from "@/models/registerSchema";
+import UserSchema from "@/models/userSchema";
 
 export default function LoginPage() {
   const [error, setError] = useState<string | string[] | null>(null);
@@ -23,16 +25,10 @@ export default function LoginPage() {
     if (loginValidate) setError(loginValidate);
     else {
       Login(newData).then((res) => {
-        console.log(res)
-        const jobSekeerValidate = JobSekeerSchema.validate(res);
-        if (!jobSekeerValidate) {
+        const userValidation = UserSchema.validate(res);
+        if (!userValidation) {
           setUser(new JobSekeerSchema(res));
-          return router.push("/");
-        }
-        const employerValidate = EmployerSchema.validate(res);
-        if (!employerValidate) {
-          setUser(new EmployerSchema(res));
-          return router.push("/");
+          return router.push("/Profile/Continue");
         } else setError(res);
       });
     }

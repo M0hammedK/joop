@@ -1,5 +1,5 @@
 import any from "@/models/loginSchema";
-import { UserSchema } from "@/models/registerSchema";
+import UserSchema from "@/models/userSchema";
 import axios from "axios";
 
 export const Login = async (user: any): Promise<any | string> => {
@@ -32,7 +32,6 @@ export const Register = async (user: UserSchema): Promise<any | string> => {
     })
     .catch((err: any) => {
       response = err.message as string;
-      console.log(err.message);
     });
   return response!;
 };

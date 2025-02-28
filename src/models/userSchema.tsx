@@ -1,9 +1,9 @@
 import UserRegisterSharedSchema from "./userRegisterSharedSchema";
 
-class RegisterSchema extends UserRegisterSharedSchema {
+class UserSchema extends UserRegisterSharedSchema {
   constructor(data: any) {
     super(data);
   }
 }
 
-export default RegisterSchema;
+export default UserSchema;

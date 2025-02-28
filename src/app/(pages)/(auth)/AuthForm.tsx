@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import defualtImage from"/src/Images/file.svg"
 
 interface Props {
   type: string;
@@ -15,10 +16,10 @@ interface Props {
 export default function AuthForm({ type, onSubmit }: Props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("");
+  const [role, setRole] = useState("Job Seeker");
   const [name, setName] = useState("");
   const [image, setImage] = useState<Blob | null>(null);
-  const [preview, setPreviw] = useState<string>("/file.svg");
+  const [preview, setPreviw] = useState<string>(defualtImage);
   const [repeatPassword, setRepeatPassword] = useState("");
 
   useEffect(() => {
@@ -115,8 +116,8 @@ export default function AuthForm({ type, onSubmit }: Props) {
       {type === "register" && (
         <div className="mb-4">
           <label className="block text-gray-700 w-24">Role</label>
-          <select className="w-full" onChange={(e) => setRole(e.target.value)}>
-            <option>Job Sekeer</option>
+          <select className="w-full" value={role} onChange={(e) => setRole(e.target.value)}>
+            <option>Job Seeker</option>
             <option>Employer</option>
           </select>
         </div>
