@@ -82,6 +82,7 @@ export default function AuthForm({ type, onSubmit }: Props) {
       <div className="mb-4">
         <label className="block text-gray-700 w-24">Email</label>
         <input
+        name="email"
           type="email"
           placeholder="Enter Email"
           value={email}
@@ -93,6 +94,7 @@ export default function AuthForm({ type, onSubmit }: Props) {
       <div className="mb-4">
         <label className="block text-gray-700 w-24">Password</label>
         <input
+        name="password"
           type="password"
           placeholder="Enter Password"
           value={password}
@@ -105,6 +107,7 @@ export default function AuthForm({ type, onSubmit }: Props) {
         <div className="mb-4">
           <label className="block text-gray-700 w-24">Repeat Password</label>
           <input
+
             type="password"
             placeholder="Enter Password again"
             value={repeatPassword}
