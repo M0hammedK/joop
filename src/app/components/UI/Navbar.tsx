@@ -15,7 +15,7 @@ export default function Navbar() {
   }, []);
 
   return (
-    <section className="fixed start-0 top-0 w-[10%] md:w-[30%] lg:w-[20%] h-full bg-blue-700">
+    <section className="fixed start-0 top-0 w-[10%] md:w-[30%] lg:w-[20%] h-full z-50 bg-blue-700">
       {/* Menu Button */}
       <BiMenu
         className="sm:hidden block pt-3 text-5xl text-white cursor-pointer self-start "
@@ -59,9 +59,9 @@ export default function Navbar() {
               {[
                 { label: "Home", path: "/" },
                 ...(user?.role === "JOB_SEEKER"
-                  ? [{ label: "Your Applications", path: "/Applications" }]
+                  ? [{ label: "Your Applications", path: "/All" }]
                   : user?.role === "EMPLOYER"
-                  ? [{ label: "Add Job", path: "/Create" }]
+                  ? [{ label: "Add Job", path: "/Create" }, { label: "Your Applications", path: "/All" }]
                   : []),
               ].map(({ label, path }) => (
                 <li

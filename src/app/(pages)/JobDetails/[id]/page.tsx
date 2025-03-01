@@ -100,7 +100,7 @@ export default function JobDetails() {
       </div>
 
       <div className="mt-4">
-        <ApplyButton />
+        <ApplyButton jobId={Number(id)} />
         
         {/* Conditionally render the Edit button only if the current user is the job owner */}
         {isJobOwner && (

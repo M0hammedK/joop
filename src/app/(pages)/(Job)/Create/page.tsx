@@ -13,21 +13,20 @@ export default function Page() {
     description: "",
     company: "",
     location: "",
-    salary: 0, // Make sure to keep this as a number
+    salary: 0,
     category: "",
-    employerId: user?.id, // Assuming `user?.id` is the user ID from the token
+    employerId: user?.id,
   });
 
   if (user) {
     if (!checkComplateProfile(user)) redirect("/Profile/Continue");
   } else redirect("/");
 
-  // Handle form changes
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setJobData({
       ...jobData,
-      [name]: name === "salary" ? parseFloat(value) : value, // Convert salary to number
+      [name]: name === "salary" ? parseFloat(value) : value,
     });
   };
 
@@ -39,7 +38,6 @@ export default function Page() {
     });
   };
 
-  // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -53,13 +51,11 @@ export default function Page() {
             Authorization: `Bearer ${localStorage.getItem("Token")}`,
           },
         }
-        
       );
-    console.log(response);
 
+      console.log(response);
       if (response.status === 201) {
         console.log("Job created successfully!");
-        // You can redirect here if needed
       }
     } catch (error) {
       console.error("Error creating job:", error);
@@ -67,94 +63,76 @@ export default function Page() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-4">
-      <h2 className="text-2xl font-semibold mb-4">Create a Job</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label htmlFor="title" className="block text-sm font-medium">Job Title</label>
-          <input
-            id="title"
-            name="title"
-            type="text"
-            value={jobData.title}
-            onChange={handleInputChange}
-            className="mt-1 block w-full border rounded p-2"
-            required
-          />
-        </div>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6">
+      {/* Title fixed at the very top */}
+      <h2 className="text-3xl font-bold text-gray-800 mb-6">Create a Job</h2>
 
-        <div>
-          <label htmlFor="description" className="block text-sm font-medium">Job Description</label>
-          <textarea
-            id="description"
-            name="description"
-            value={jobData.description}
-            onChange={handleTextAreaChange}
-            className="mt-1 block w-full border rounded p-2"
-            rows={4}
-            required
-          />
-        </div>
+      <div className="w-full max-w-lg bg-white shadow-lg rounded-xl p-8">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Job Title Input First */}
+          <div className="flex flex-col">
+            <label htmlFor="title" className="text-sm font-medium text-gray-700 mb-1">
+              Job Title
+            </label>
+            <input
+              id="title"
+              name="title"
+              type="text"
+              value={jobData.title}
+              onChange={handleInputChange}
+              className="border border-gray-300 rounded-lg p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+              required
+            />
+          </div>
 
-        <div>
-          <label htmlFor="company" className="block text-sm font-medium">Company</label>
-          <input
-            id="company"
-            name="company"
-            type="text"
-            value={jobData.company}
-            onChange={handleInputChange}
-            className="mt-1 block w-full border rounded p-2"
-            required
-          />
-        </div>
+          {/* Other Inputs */}
+          {[
+            { label: "Company", name: "company", type: "text" },
+            { label: "Location", name: "location", type: "text" },
+            { label: "Salary", name: "salary", type: "number" },
+            { label: "Category", name: "category", type: "text" },
+          ].map(({ label, name, type }) => (
+            <div key={name} className="flex flex-col">
+              <label htmlFor={name} className="text-sm font-medium text-gray-700 mb-1">
+                {label}
+              </label>
+              <input
+                id={name}
+                name={name}
+                type={type}
+                value={jobData[name as keyof typeof jobData]}
+                onChange={handleInputChange}
+                className="border border-gray-300 rounded-lg p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                required
+              />
+            </div>
+          ))}
 
-        <div>
-          <label htmlFor="location" className="block text-sm font-medium">Location</label>
-          <input
-            id="location"
-            name="location"
-            type="text"
-            value={jobData.location}
-            onChange={handleInputChange}
-            className="mt-1 block w-full border rounded p-2"
-            required
-          />
-        </div>
+          {/* Job Description */}
+          <div className="flex flex-col">
+            <label htmlFor="description" className="text-sm font-medium text-gray-700 mb-1">
+              Job Description
+            </label>
+            <textarea
+              id="description"
+              name="description"
+              value={jobData.description}
+              onChange={handleTextAreaChange}
+              className="border border-gray-300 rounded-lg p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+              rows={4}
+              required
+            />
+          </div>
 
-        <div>
-          <label htmlFor="salary" className="block text-sm font-medium">Salary</label>
-          <input
-            id="salary"
-            name="salary"
-            type="number"
-            value={jobData.salary}
-            onChange={handleInputChange}
-            className="mt-1 block w-full border rounded p-2"
-            required
-          />
-        </div>
-
-        <div>
-          <label htmlFor="category" className="block text-sm font-medium">Category</label>
-          <input
-            id="category"
-            name="category"
-            type="text"
-            value={jobData.category}
-            onChange={handleInputChange}
-            className="mt-1 block w-full border rounded p-2"
-            required
-          />
-        </div>
-
-        <button
-          type="submit"
-          className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
-        >
-          Create Job
-        </button>
-      </form>
+          {/* Submit Button */}
+          <button
+            type="submit"
+            className="w-full bg-blue-600 text-white text-lg font-medium py-3 rounded-lg hover:bg-blue-700 transition duration-300"
+          >
+            Create Job
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

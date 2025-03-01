@@ -11,10 +11,10 @@ export default function Home() {
   if (user) if (!checkComplateProfile(user)) redirect("/Profile/Continue");
   return (
     <section className="p-6 flex flex-col w-full">
-      <div className="w-full">
+      <div className="w-full ">
         <MainPanal />
       </div>
-      <div className="flex mt-12 w-full justify-start">
+      <div className="flex mt-12 w-full justify-start ">
         <JobCard />
       </div>
     </section>
