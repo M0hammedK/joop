@@ -7,9 +7,11 @@ import { MdKeyboardBackspace } from "react-icons/md";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import ApplyButton from "@/app/components/UI/ApplyButton";
+import { useUser } from "@/app/components/contexts/UserContext"; // Assuming you have a UserContext to get user data
 
 export default function JobDetails() {
   const { id } = useParams(); // Get job ID from URL
+  const { user } = useUser(); // Get the current user from context
 
   interface Job {
     company: string;
@@ -19,6 +21,7 @@ export default function JobDetails() {
     salary: number;
     category: string;
     location: string;
+    employerId: number; // Add employerId to the Job type
   }
 
   const [job, setJob] = useState<Job | null>(null);
@@ -33,12 +36,34 @@ export default function JobDetails() {
         );
     }
   }, [id]);
-
+  
   if (!job) {
     return (
       <p className="text-center text-gray-500">Loading job details...</p>
     );
   }
+
+  const isJobOwner = user?.id === job?.employerId; // Check if the current user is the job owner
+  console.log(isJobOwner)
+  // Handle delete request
+  const handleDelete = async () => {
+    try {
+      const confirmation = window.confirm("Are you sure you want to delete this job?");
+      if (!confirmation) return;
+
+      await axios.delete(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/job/${id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("Token")}`, // Assuming user object has a token property
+        },
+      });
+
+      alert("Job deleted successfully");
+      window.location.href = "/"; // Redirect to homepage after delete
+    } catch (error) {
+      console.error("Error deleting job:", error);
+      alert("Failed to delete job");
+    }
+  };
 
   return (
     <section className="contain-content mt-12 p-6 w-full flex flex-col max-w-4xl mx-auto bg-white shadow-lg rounded-lg border border-gray-200 gap-6">
@@ -75,7 +100,25 @@ export default function JobDetails() {
       </div>
 
       <div className="mt-4">
-      <ApplyButton />
+        <ApplyButton />
+        
+        {/* Conditionally render the Edit button only if the current user is the job owner */}
+        {isJobOwner && (
+          <>
+            <button
+              className="w-full bg-blue-600 text-slate-100 pl-10 pt-2 rounded-sm pb-2 pr-10 hover:text-blue-600 hover:bg-slate-100"
+              onClick={() => window.location.href = `/update/${id}`}
+            >
+              Edit
+            </button>
+            <button
+              className="w-full bg-red-600 text-slate-100 pl-10 pt-2 ml-3 mb-2 rounded-sm pb-2 pr-10 hover:text-red-600 hover:bg-slate-100 mt-2"
+              onClick={handleDelete}
+            >
+              Delete
+            </button>
+          </>
+        )}
       </div>
     </section>
   );
