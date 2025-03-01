@@ -6,6 +6,8 @@ import JobSekeerSchema from "@/models/jobSekeerSchema";
 import { uploadImage } from "@/app/services/FileSrevices";
 import EmployerSchema from "@/models/employerSchema";
 import { redirect } from "next/navigation";
+import { sendProfile } from "@/app/services/ProfileServices";
+import { setTypeUser } from "@/utils/UserUtils";
 
 export default function ContinueProfile() {
   const { user, setUser } = useUser(); // Assuming user is stored in context
@@ -16,7 +18,7 @@ export default function ContinueProfile() {
     resume: null,
     skills: "",
   });
-
+  if (!user) redirect("/");
   const handleChange = (e: any) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -43,19 +45,35 @@ export default function ContinueProfile() {
             resume: res,
             skills: formData.skills,
           };
-
-          setUser(new JobSekeerSchema(jobSeeker));
-          return redirect("/");
+          if (!JobSekeerSchema.validate(jobSeeker))
+            sendProfile({
+              user: jobSeeker,
+              Token: localStorage.getItem("Token"),
+            })
+              .then((profile) => {
+                setUser(setTypeUser(user, profile));
+                return redirect("/");
+              })
+              .catch((err) => setError(err));
         }); // Await file upload
-      } catch (error) {
-        setError("Failed to upload resume");
+      } catch (err) {
+        console.log(err);
+        setError("failed to upload resume");
       }
     } else if (user?.role === "EMPLOYER") {
       const employer = { ...user, ...formData };
       const employerValidate = EmployerSchema.validate(employer);
 
       if (!employerValidate) {
-        setUser(new EmployerSchema(employer));
+        sendProfile({
+          user: employer,
+          Token: localStorage.getItem("Token"),
+        })
+          .then((profile) => {
+            setUser(setTypeUser(user, profile));
+            return redirect("/");
+          })
+          .catch((err) => setError(err));
       } else {
         setError(employerValidate);
       }

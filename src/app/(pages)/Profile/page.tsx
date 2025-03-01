@@ -1,6 +1,10 @@
 "use client";
 
+import { useUser } from "@/app/components/contexts/UserContext";
+import JobSeekerSchema from "@/models/jobSekeerSchema";
+import { checkComplateProfile } from "@/utils/ProfileUtils";
 import Image from "next/image";
+import { redirect } from "next/navigation";
 import { useState } from "react";
 
 export default function Profile() {
@@ -8,7 +12,10 @@ export default function Profile() {
   const [description, setDescription] = useState("User description here...");
   const [isEditingUsername, setIsEditingUsername] = useState(false);
   const [isEditingDescription, setIsEditingDescription] = useState(false);
-
+  const { user, setUser } = useUser();
+  if (user) {
+    if (!checkComplateProfile(user)) redirect("/Profile/Continue");
+  } else redirect("/");
   return (
     <section className="p-6 mt-12 flex flex-col items-center bg-gray-100 rounded-lg shadow-lg w-full max-w-md mx-auto">
       <label htmlFor="profileImage" className="cursor-pointer">

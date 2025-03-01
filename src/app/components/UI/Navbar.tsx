@@ -5,10 +5,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { BiMenu } from "react-icons/bi";
 import { motion } from "framer-motion";
+import { useUser } from "../contexts/UserContext";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(true);
-
+  const { user } = useUser();
   useEffect(() => {
     if (window.screen.width > 640) setIsOpen(true);
   }, []);
@@ -36,63 +37,79 @@ export default function Navbar() {
         >
           ✕
         </button>
-
-        {/* Profile Section */}
-        <div className="flex flex-col items-center">
-          <Image
-            src="/uploads/images/defaultImage.svg"
-            alt="Profile Picture"
-            width={100}
-            height={100}
-            className="image"
-          />
-          <h3 className="mt-3 text-lg font-semibold">Company Name</h3>
-        </div>
-        <div className="flex-col justify-between w-full h-full">
+        <div className="flex flex-col items-center h-full w-full justify-between">
+          {/* Profile Section */}
+          <div className="flex flex-col items-center w-full">
+            <Link href={user? "/Profile": "/"}>
+            <Image
+              src={user?.imagePath || "/uploads/images/defaultImage.svg"}
+              alt="Profile Picture"
+              width={100}
+              height={100}
+              className="image"
+              />
+              </Link>
+            <h3 className="mt-3 text-lg font-semibold">
+              {user?.name || "JooP"}
+            </h3>
+          </div>
           {/* Navigation Links */}
-          <ul className="mt-8 space-y-4 w-full text-center">
-            {[
-              { label: "Sign In", path: "/Login" },
-              { label: "Sign Up", path: "/Register" },
-              { label: "Home", path: "/" },
-              { label: "Item 2", path: "/" },
-              { label: "Item 3", path: "/" },
-            ].map(({ label, path }) => (
-              <li
-                key={label}
-                className="p-3 hover:bg-selected transition hover:shadow-xl"
-              >
-                <Link
-                  href={path}
-                  onClick={() => {
-                    window.screen.width < 640 && setIsOpen(false);
-                  }}
+          <div className="w-full mb-44">
+            <ul className="mt-8 space-y-4 w-full text-center">
+              {[
+                { label: "Home", path: "/" },
+                ...(user?.role === "JOB_SEEKER"
+                  ? [{ label: "Your Applications", path: "/Applications" }]
+                  : user?.role === "EMPLOYER"
+                  ? [{ label: "Add Job", path: "/Create" }]
+                  : []),
+              ].map(({ label, path }) => (
+                <li
+                  key={label}
+                  className="p-3 hover:bg-selected transition hover:shadow-xl"
                 >
-                  <h3>{label}</h3>
-                </Link>
-              </li>
-            ))}
-          </ul>
-          <ul className="mt-8 space-y-4 w-full text-center">
-            {[
-              { label: "Profile", path: "/Profile" },
-              { label: "Sign Out", path: "#" },
-            ].map(({ label, path }) => (
-              <li
-                key={label}
-                className="p-3 hover:bg-selected transition hover:shadow-xl"
-              >
-                <Link
-                  href={path}
-                  onClick={() => {
-                    window.screen.width < 640 && setIsOpen(false);
-                  }}
+                  <Link
+                    href={path}
+                    onClick={() => {
+                      window.screen.width < 640 && setIsOpen(false);
+                    }}
+                  >
+                    <h3>{label}</h3>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="w-full">
+            <ul className="mt-8 space-y-4 w-full text-center">
+              {[
+                ...(!user
+                  ? [
+                      { label: "Sign In", path: "/Login" },
+                      { label: "Sign Up", path: "/Register" },
+                    ]
+                  : [
+                      // If user is logged in, show Profile & Logout
+                      { label: "Profile", path: "/Profile" },
+                      { label: "Logout", path: "/Logout" }, // Logout doesn't need a path
+                    ]),
+              ].map(({ label, path }) => (
+                <li
+                  key={label}
+                  className="p-3 hover:bg-selected transition hover:shadow-xl"
                 >
-                  <h3>{label}</h3>
-                </Link>
-              </li>
-            ))}
-          </ul>
+                  <Link
+                    href={path}
+                    onClick={() => {
+                      window.screen.width < 640 && setIsOpen(false);
+                    }}
+                  >
+                    <h3>{label}</h3>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </motion.nav>
     </section>

@@ -2,14 +2,15 @@
 
 import LoginSchema from "@/models/loginSchema";
 import AuthForm from "../AuthForm";
-import { Login } from "../../../services/AuthServices";
+import { checkFirstTime, Login } from "../../../services/AuthServices";
 import { useState } from "react";
 import EmployerSchema from "@/models/employerSchema";
 import JobSekeerSchema from "@/models/jobSekeerSchema";
 import { useUser } from "@/app/components/contexts/UserContext";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import RegisterSchema from "@/models/registerSchema";
 import UserSchema from "@/models/userSchema";
+import { setTypeUser } from "@/utils/UserUtils";
 
 export default function LoginPage() {
   const [error, setError] = useState<string | string[] | null>(null);
@@ -24,28 +25,18 @@ export default function LoginPage() {
     const loginValidate = LoginSchema.validate(newData);
     if (loginValidate) setError(loginValidate);
     else {
-      Login(newData).then((res) => {
-        if (res["role"])
-          switch (res["role"]) {
-            case "JOB_SEEKER":
-              if (!JobSekeerSchema.validate(res)) {
-                setUser(new JobSekeerSchema(res));
-                return router.push("/");
-              }
-              setUser(new UserSchema(res));
-              return router.push("/Profile/Continue");
-
-            case "EMPLOYER":
-              if (!EmployerSchema.validate(res)) {
-                setUser(new EmployerSchema(res));
-                return router.push("/");
-              }
-              setUser(new UserSchema(res));
-              return router.push("/Profile/Continue");
-            default:
-              setError(res);
-              break;
-          }
+      Login(newData).then((user) => {
+        if (user["role"]) {
+          checkFirstTime(localStorage.getItem('Token'))
+            .then((profile) => {
+              setUser(setTypeUser(user, profile));
+              redirect("/");
+            })
+            .catch((err) => {
+              setUser(user);
+              redirect("/Profile/Continue");
+            });
+        } else setError(user);
       });
     }
   };

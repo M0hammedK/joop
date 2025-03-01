@@ -1,20 +1,36 @@
 import { z } from "zod";
 import UserSchema from "./userSchema";
-import { userRegisterSharedSchema } from "./userRegisterSharedSchema";
+import { userRegisterSharedSchema, userRoleEnum } from "./userRegisterSharedSchema";
 
-const jobSeekerSchema = userRegisterSharedSchema.extend({
+const jobSeekerSchema = z.object({
+  id: z.number().optional(),
+    name: z.string().min(1, "Name is required"),
+    email: z.string().email("Invalid email format"),
+    password: z.string().min(6, "Password must be at least 6 characters"),
+    role: z.enum(userRoleEnum),
+    imagePath: z.string(),
   resume: z.string().min(1, "Resume is required"),
   skills: z.string().min(1, "").optional(),
 });
 
-class JobSeekerSchema extends UserSchema {
+class JobSeekerSchema {
+  public id?: number;
+  public name: string;
+  public email: string;
+  public password: string;
+  public role: string;
+  public imagePath: string;
   public resume: string;
   public skills?: string;
 
   constructor(data: any) {
-    const { resume, skills, ...rest } = data;
-    super({ ...rest });
-    const parsed = jobSeekerSchema.parse({ resume, skills });
+    const parsed = jobSeekerSchema.parse(data);
+    this.id = parsed.id;
+    this.name = parsed.name;
+    this.password = parsed.password;
+    this.email = parsed.email;
+    this.role = parsed.role;
+    this.imagePath = parsed.imagePath
     this.resume = parsed.resume;
     this.skills = parsed.skills;
   }

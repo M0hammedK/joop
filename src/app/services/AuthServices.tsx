@@ -11,7 +11,7 @@ export const Login = async (user: any) => {
       },
     })
     .then((res: any) => {
-      if (res.data === "Invalid User") return (response = res.data);      
+      if (res.data === "Invalid User") return (response = res.data);
       response = res.data["data"];
       localStorage.setItem("Token", res.data["token"]);
     })
@@ -33,7 +33,24 @@ export const Register = async (user: object) => {
       response = res.data;
     })
     .catch((error) => {
-      response = error
+      response = error;
+    });
+  return response;
+};
+
+export const checkFirstTime = async (token: any) => {
+  let response: any;
+  await axios
+    .get("/api/getProfile", {
+      headers: {
+        Authorization: token,
+      },
+    })
+    .then((res) => {
+      response = res.data;
+    })
+    .catch((error) => {
+      response = error;
     });
   return response;
 };
