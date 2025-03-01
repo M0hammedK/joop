@@ -3,7 +3,7 @@ import axios from "axios";
 export const sendApplication = async (data: any) => {
     let response: any;
     await axios
-      .post("/api/sendProfile", data["user"], {
+      .post("/api/", data["user"], {
         headers: {
           "Content-Type": "application/json",
           Authorization: data["Token"],
