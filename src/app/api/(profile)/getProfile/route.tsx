@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 
 export const GET = async (req: Request) => {
   try {
-    console.log(req.headers.get("Authorization"));
+    console.log(process.env.NEXT_PUBLIC_BACKEND_URL);
     const res: any = await GetProfile(req.headers.get("Authorization"));
     console.log(res)
     return NextResponse.json(res);

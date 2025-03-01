@@ -5,7 +5,7 @@ export const GetProfile = async (token: any): Promise<any | string> => {
   await axios
     .get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/profile`, {
       headers: {
-        Authorization: token,
+        Authorization: `Bearer ${token}`,
       },
     })
     .then((res: any) => {
@@ -26,7 +26,7 @@ export const SendProfile = async (
     .post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/profile`, user, {
       headers: {
         "Content-Type": "application/json",
-        Authorization: token,
+        Authorization: `Bearer ${token}`,
       },
     })
     .then((res: any) => {
