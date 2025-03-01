@@ -62,7 +62,7 @@ export default function JobList() {
             >
               Read More
             </Link>
-            <ApplyButton />
+            <ApplyButton jobId={job.id} />
           </div>
         </div>
       ))}

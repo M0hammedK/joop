@@ -33,6 +33,7 @@ const handleLogin = async (e: any, data: any): Promise<any> => {
           checkFirstTime(localStorage.getItem("Token"))
             .then((profile) => {
               if (profile !== "notfound") {
+                console.log(setTypeUser(user, profile))
                 setUser(setTypeUser(user, profile));
                 router.push("/");
               } else {

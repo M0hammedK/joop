@@ -9,12 +9,23 @@ export const setTypeUser = (
   switch (user.role) {
     case "JOB_SEEKER":
       const { resume, skills } = profile as JobSeekerSchema;
-      if (!JobSeekerSchema.validate({ ...user, resume, skills }))
+      if (JobSeekerSchema.validate({ ...user, resume, skills }) === null)
         return new JobSeekerSchema({ ...user, resume, skills });
     case "EMPLOYER":
       const { companyWebsite, companyName } = profile as EmployerSchema;
-      if (!EmployerSchema.validate(user))
-        return new EmployerSchema({ ...user, companyName, companyWebsite });
+
+      if (
+        EmployerSchema.validate({
+          ...user,
+          companyWebsite: companyWebsite || "http://localhost:3000",
+          companyName,
+        }) === null
+      )
+        return new EmployerSchema({
+          ...user,
+          companyName,
+          companyWebsite: companyWebsite || "http://localhost:3000",
+        });
     default:
       return null;
   }
