@@ -18,6 +18,8 @@ export default function Page() {
     employerId: user?.id,
   });
 
+  const [loading, setLoading] = useState(false); // State for loading
+
   if (user) {
     if (!checkComplateProfile(user)) redirect("/Profile/Continue");
   } else redirect("/");
@@ -40,8 +42,8 @@ export default function Page() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true); // Set loading to true on submit
 
-    console.log(jobData);
     try {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/job/create`,
@@ -53,12 +55,15 @@ export default function Page() {
         }
       );
 
-      console.log(response);
       if (response.status === 201) {
         console.log("Job created successfully!");
       }
     } catch (error) {
       console.error("Error creating job:", error);
+    } finally {
+
+      setLoading(false); // Reset loading when done
+      redirect("/")
     }
   };
 
@@ -127,9 +132,12 @@ export default function Page() {
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white text-lg font-medium py-3 rounded-lg hover:bg-blue-700 transition duration-300"
+            className={`w-full text-lg font-medium py-3 rounded-lg transition duration-300 ${
+              loading ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600 text-white hover:bg-blue-700"
+            }`}
+            disabled={loading} // Disable the button while loading
           >
-            Create Job
+            {loading ? "Submitting..." : "Create Job"}
           </button>
         </form>
       </div>

@@ -19,6 +19,8 @@ export default function EditJobPage() {
     employerId: user?.id, // Assuming `user?.id` is the user ID from the token
   });
 
+  const [loading, setLoading] = useState(false); // State for loading
+
   useEffect(() => {
     if (user) {
       if (!checkComplateProfile(user)) {
@@ -74,6 +76,7 @@ export default function EditJobPage() {
   // Handle form submission (for editing)
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true); // Set loading to true on submit
 
     try {
       const response = await axios.put(
@@ -91,6 +94,8 @@ export default function EditJobPage() {
       }
     } catch (error) {
       console.error("Error updating job:", error);
+    } finally {
+      setLoading(false); // Reset loading when done
     }
   };
 
@@ -159,9 +164,12 @@ export default function EditJobPage() {
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white text-lg font-medium py-3 rounded-lg hover:bg-blue-700 transition duration-300"
+            className={`w-full text-lg font-medium py-3 rounded-lg transition duration-300 ${
+              loading ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600 text-white hover:bg-blue-700"
+            }`}
+            disabled={loading} // Disable the button while loading
           >
-            Update Job
+            {loading ? "Submitting..." : "Update Job"}
           </button>
         </form>
       </div>

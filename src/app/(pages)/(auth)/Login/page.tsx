@@ -27,17 +27,19 @@ const handleLogin = async (e: any, data: any): Promise<any> => {
     if (loginValidate) setError(loginValidate);
     else {
       await Login(newData).then((user) => {
-        setIsSubmitting(false); // Reset loading state after login
 
         if (user["role"]) {
           checkFirstTime(localStorage.getItem("Token"))
             .then((profile) => {
               if (profile !== "notfound") {
                 console.log(setTypeUser(user, profile))
+                
                 setUser(setTypeUser(user, profile));
+                setIsSubmitting(false); 
                 router.push("/");
               } else {
                 setUser(user);
+                setIsSubmitting(false); 
                 router.push("/Profile/Continue");
               }
             })
