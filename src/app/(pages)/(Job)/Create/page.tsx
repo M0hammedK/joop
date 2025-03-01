@@ -13,7 +13,7 @@ export default function Page() {
     description: "",
     company: "",
     location: "",
-    salary: 0,
+    salary: 0, // Make sure to keep this as a number
     category: "",
     employerId: user?.id, // Assuming `user?.id` is the user ID from the token
   });
@@ -27,7 +27,7 @@ export default function Page() {
     const { name, value } = e.target;
     setJobData({
       ...jobData,
-      [name]: value,
+      [name]: name === "salary" ? parseFloat(value) : value, // Convert salary to number
     });
   };
 
@@ -43,12 +43,23 @@ export default function Page() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    console.log(jobData);
     try {
-      const response = await axios.post("/api/job", jobData);
-      if (response.status === 200) {
-        // Redirect to the job listing page or show a success message
-        // redirect("/job");
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/job/create`,
+        jobData,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("Token")}`,
+          },
+        }
+        
+      );
+    console.log(response);
+
+      if (response.status === 201) {
         console.log("Job created successfully!");
+        // You can redirect here if needed
       }
     } catch (error) {
       console.error("Error creating job:", error);
