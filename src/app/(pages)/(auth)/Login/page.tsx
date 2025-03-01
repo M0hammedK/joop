@@ -13,7 +13,12 @@ export default function LoginPage() {
   const { setUser } = useUser();
   const router = useRouter();
 
-  const handleLogin = (e: any, data: any): any => {
+const [isSubmitting, setIsSubmitting] = useState(false);
+
+const handleLogin = async (e: any, data: any): Promise<any> => {
+  e.preventDefault();
+  setIsSubmitting(true); // Set loading state to true
+
     e.preventDefault();
     setError(null);
     const { email, password } = data;
@@ -21,7 +26,9 @@ export default function LoginPage() {
     const loginValidate = LoginSchema.validate(newData);
     if (loginValidate) setError(loginValidate);
     else {
-      Login(newData).then((user) => {
+      await Login(newData).then((user) => {
+        setIsSubmitting(false); // Reset loading state after login
+
         if (user["role"]) {
           checkFirstTime(localStorage.getItem("Token"))
             .then((profile) => {
@@ -45,7 +52,8 @@ export default function LoginPage() {
     <div className="h-full items-end">
       <div className="p-6 flex flex-col items-center bg-gray-100 rounded-lg shadow-lg w-full max-w-md mx-auto">
         <h2 className="text-xl font-semibold mb-4">Sign In</h2>
-        <AuthForm type="login" onSubmit={handleLogin} />
+        <AuthForm type="login" onSubmit={handleLogin} isSubmitting={isSubmitting} />
+
         {error && <h3 className="text-red-600">{`${error}`}</h3>}
       </div>
     </div>

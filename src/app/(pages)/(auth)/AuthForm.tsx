@@ -2,9 +2,13 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
+
 interface Props {
+  isSubmitting: boolean; // Added isSubmitting prop
+
   type: string;
-  onSubmit: (
+      onSubmit: ( 
+
     e: React.FormEvent<HTMLFormElement>,
     { email, password, repeatPassword, name, role }: any,
     image: Blob | null
@@ -21,6 +25,7 @@ export default function AuthForm({ type, onSubmit }: Props) {
     "/uploads/images/defaultImage.svg"
   );
   const [repeatPassword, setRepeatPassword] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     const getImage = async () => {
@@ -29,10 +34,13 @@ export default function AuthForm({ type, onSubmit }: Props) {
     };
     if (image !== null) getImage();
   }, [image]);
+
   return (
     <form
-      onSubmit={(e: React.FormEvent<HTMLFormElement>) =>
-        onSubmit(
+      onSubmit={async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        setIsSubmitting(true); // Set submitting state to true
+        await onSubmit(
           e,
           {
             email,
@@ -42,9 +50,10 @@ export default function AuthForm({ type, onSubmit }: Props) {
             role: role.toUpperCase().replace(" ", "_"),
           },
           image
-        )
-      }
-      className=" w-full"
+        );
+        setIsSubmitting(false); // Reset submitting state after submission
+      }}
+      className="w-full"
     >
       {type === "register" && (
         <div className="mb-4">
@@ -70,7 +79,7 @@ export default function AuthForm({ type, onSubmit }: Props) {
         <div className="mb-4">
           <label className="block text-gray-700 w-24">Username</label>
           <input
-          name="name"
+            name="name"
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -83,7 +92,7 @@ export default function AuthForm({ type, onSubmit }: Props) {
       <div className="mb-4">
         <label className="block text-gray-700 w-24">Email</label>
         <input
-        name="email"
+          name="email"
           type="email"
           placeholder="Enter Email"
           value={email}
@@ -95,7 +104,7 @@ export default function AuthForm({ type, onSubmit }: Props) {
       <div className="mb-4">
         <label className="block text-gray-700 w-24">Password</label>
         <input
-        name="password"
+          name="password"
           type="password"
           placeholder="Enter Password"
           value={password}
@@ -133,9 +142,10 @@ export default function AuthForm({ type, onSubmit }: Props) {
       )}
       <button
         type="submit"
-        className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600"
+        className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-50"
+        disabled={isSubmitting}
       >
-        {type === "register" ? "Sign Up" : "Sign In"}
+        {isSubmitting ?  "Submitting..." : (type === "register" ? "Sign Up" : "Sign In")}
       </button>
     </form>
   );
