@@ -9,7 +9,7 @@ export const setTypeUser = (
   switch (user.role) {
     case "JOB_SEEKER":
       const { resume, skills } = profile as JobSeekerSchema;
-      if (!JobSeekerSchema.validate(user))
+      if (!JobSeekerSchema.validate({ ...user, resume, skills }))
         return new JobSeekerSchema({ ...user, resume, skills });
     case "EMPLOYER":
       const { companyWebsite, companyName } = profile as EmployerSchema;

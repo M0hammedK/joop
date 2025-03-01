@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useUser } from "../../../components/contexts/UserContext";
 import JobSekeerSchema from "@/models/jobSekeerSchema";
 import { uploadImage } from "@/app/services/FileSrevices";
 import EmployerSchema from "@/models/employerSchema";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { sendProfile } from "@/app/services/ProfileServices";
 import { setTypeUser } from "@/utils/UserUtils";
 
@@ -18,7 +18,14 @@ export default function ContinueProfile() {
     resume: null,
     skills: "",
   });
-  if (!user) redirect("/");
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!user) {
+      router.push("/");
+    }
+  }, [user, router]);
+
   const handleChange = (e: any) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -45,14 +52,14 @@ export default function ContinueProfile() {
             resume: res,
             skills: formData.skills,
           };
-          if (!JobSekeerSchema.validate(jobSeeker))
+          if (JobSekeerSchema.validate(jobSeeker) === null)
             sendProfile({
               user: jobSeeker,
               Token: localStorage.getItem("Token"),
             })
               .then((profile) => {
-                setUser(setTypeUser(user, profile));
-                return redirect("/");
+                setUser(new JobSekeerSchema(jobSeeker));
+                router.push("/");
               })
               .catch((err) => setError(err));
         }); // Await file upload
@@ -64,14 +71,14 @@ export default function ContinueProfile() {
       const employer = { ...user, ...formData };
       const employerValidate = EmployerSchema.validate(employer);
 
-      if (!employerValidate) {
+      if (employerValidate === null) {
         sendProfile({
           user: employer,
           Token: localStorage.getItem("Token"),
         })
           .then((profile) => {
-            setUser(setTypeUser(user, profile));
-            return redirect("/");
+            setUser(new EmployerSchema(employer));
+            router.push("/");
           })
           .catch((err) => setError(err));
       } else {
@@ -134,7 +141,11 @@ export default function ContinueProfile() {
           Continue
         </button>
       </form>
-      {error && <h3 className="text-red-600">{error}</h3>}
+      {error && (
+        <h3 className="text-red-600">
+          {Array.isArray(error) ? error.join(", ") : String(error)}
+        </h3>
+      )}
     </div>
   );
 }

@@ -10,8 +10,7 @@ export const POST = async (req: Request) => {
     else if (EmployerSchema.validate(data)) NextResponse.error();
   try {
     const res: any = await SendProfile(data, req.headers.get('Authorization'));
-    console.log(res.data);
-    return NextResponse.json(res.data);
+    return NextResponse.json(res);
   } catch (err) {
     console.log(err);
 

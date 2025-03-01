@@ -4,12 +4,8 @@ import LoginSchema from "@/models/loginSchema";
 import AuthForm from "../AuthForm";
 import { checkFirstTime, Login } from "../../../services/AuthServices";
 import { useState } from "react";
-import EmployerSchema from "@/models/employerSchema";
-import JobSekeerSchema from "@/models/jobSekeerSchema";
 import { useUser } from "@/app/components/contexts/UserContext";
-import { redirect, useRouter } from "next/navigation";
-import RegisterSchema from "@/models/registerSchema";
-import UserSchema from "@/models/userSchema";
+import { useRouter } from "next/navigation";
 import { setTypeUser } from "@/utils/UserUtils";
 
 export default function LoginPage() {
@@ -27,14 +23,18 @@ export default function LoginPage() {
     else {
       Login(newData).then((user) => {
         if (user["role"]) {
-          checkFirstTime(localStorage.getItem('Token'))
+          checkFirstTime(localStorage.getItem("Token"))
             .then((profile) => {
-              setUser(setTypeUser(user, profile));
-              redirect("/");
+              if (profile !== "notfound") {
+                setUser(setTypeUser(user, profile));
+                router.push("/");
+              } else {
+                setUser(user);
+                router.push("/Profile/Continue");
+              }
             })
             .catch((err) => {
-              setUser(user);
-              redirect("/Profile/Continue");
+              setError(err);
             });
         } else setError(user);
       });

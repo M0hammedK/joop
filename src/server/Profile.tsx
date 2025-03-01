@@ -12,7 +12,7 @@ export const GetProfile = async (token: any): Promise<any | string> => {
       response = res.data;
     })
     .catch((err: any) => {
-      response = err;
+      if (err.response.status === 404) response = 'notfound';
     });
   return response!;
 };
@@ -33,7 +33,6 @@ export const SendProfile = async (
       response = res.data;
     })
     .catch((err: any) => {
-      console.log(err);
       response = err;
     });
   return response!;
