@@ -8,7 +8,6 @@ import { redirect } from "next/navigation";
 
 export default function Home() {
   const { user } = useUser();
-  console.log(user)
   if (user) if (!checkComplateProfile(user)) redirect("/Profile/Continue");
   return (
     <section className="p-6 flex flex-col w-full">

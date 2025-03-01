@@ -13,13 +13,6 @@ export const setTypeUser = (
         return new JobSeekerSchema({ ...user, resume, skills });
     case "EMPLOYER":
       const { companyWebsite, companyName } = profile as EmployerSchema;
-      console.log(
-        EmployerSchema.validate({
-          ...user,
-          companyWebsite: companyWebsite || "http://localhost:3000",
-          companyName,
-        })
-      );
       if (
         EmployerSchema.validate({
           ...user,
