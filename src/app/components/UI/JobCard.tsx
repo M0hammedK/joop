@@ -1,40 +1,71 @@
-import Image from "next/image";
+"use client";
+import { useEffect, useState } from "react";
+import axios from "axios";
 import Link from "next/link";
 import ApplyButton from "./ApplyButton";
 
-export default function JobCard() {
+export default function JobList() {
+  const [jobs, setJobs] = useState<
+    Array<{
+      company: string;
+      location: string;
+      title: string;
+      description: string;
+      salary: number;
+      id: number;
+    }>
+  >([]);
+
+  useEffect(() => {
+    const fetchJobs = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/job`
+        );
+        console.log("fetched");
+        setJobs(response.data);
+      } catch (error) {
+        console.error("Error fetching jobs:", error);
+      }
+    };
+
+    fetchJobs();
+  }, []);
+
   return (
-    <div className="flex flex-col card shadow-lg hover:shadow-xl p-2 bg-blue-50 rounded-md">
-      <div className="grid grid-cols-[30%_70%]">
-        <div className="justify-normal flex flex-col">
-          <Image
-            src={"/uploads/images/defaultImage.svg"}
-            alt="company"
-            width={200}
-            height={200}
-            className="image"
-          />
-          <h3>Company Name</h3>
-        </div>
-        <div className="flex-col">
-          <h1>Job Name</h1>
-          <ol className="list-disc">
-            <li>requrment 1</li>
-            <li>requrment 2</li>
-            <li>requrment 3</li>
-            <li>requrment 4</li>
-          </ol>
-        </div>
-      </div>
-      <div className="w-full flex justify-between gap-1 mt-2 p-2 text-center">
-        <Link
-          href={"/JobDetails"}
-          className="w-full bg-blue-600 text-slate-100 hover:text-blue-600 hover:bg-slate-100"
+    <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 p-6">
+      {jobs.map((job) => (
+        <div
+          key={job.id}
+          className="relative flex flex-col bg-white shadow-md hover:shadow-xl transition-all border border-gray-200 rounded-lg p-6"
         >
-          Read More...
-        </Link>
-        <ApplyButton />
-      </div>
+          {/* Location Badge (Positioned Top Left) */}
+          <span className="absolute top-0.5 right-1 bg-blue-100 text-blue-700 text-xs font-semibold px-3 py-1 rounded-full">
+            {job.location}
+          </span>
+
+          <h3 className="font-semibold text-lg mt-2">{job.company}</h3>
+
+          <h1 className="mt-2 text-xl font-bold text-gray-900">{job.title}</h1>
+          <p className="text-gray-600 text-sm mt-2 line-clamp-2">
+            {job.description}
+          </p>
+
+          <p className="text-blue-600 font-semibold mt-3">
+            ${job.salary.toLocaleString()} per year
+          </p>
+
+          <div className="mt-4 flex justify-between items-center">
+            <Link
+              href={`/JobDetails/${job.id}`}
+              className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition"
+            >
+              Read More
+            </Link>
+            <ApplyButton />
+          </div>
+        </div>
+      ))}
     </div>
   );
 }
