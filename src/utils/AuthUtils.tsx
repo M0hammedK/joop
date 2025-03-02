@@ -1,5 +1,3 @@
-import EmployerSchema from "@/models/employerSchema";
-import JobSeekerSchema from "@/models/jobSekeerSchema";
 import RegisterSchema, {
   userRoleEnum,
 } from "@/models/userRegisterSharedSchema";

@@ -1,11 +1,4 @@
-import EmployerSchema from "@/models/employerSchema";
-import JobSeekerSchema from "@/models/jobSekeerSchema";
-import LoginSchema from "@/models/loginSchema";
-import RegisterSchema from "@/models/registerSchema";
-import UserSchema from "@/models/userSchema";
-import { setTypeUser } from "@/utils/UserUtils";
 import axios from "axios";
-import { getUser } from "./UserServices";
 
 export const Login = async (user: any) => {
   let response: any;

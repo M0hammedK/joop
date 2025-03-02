@@ -1,6 +1,5 @@
 import EmployerSchema from "@/models/employerSchema";
 import JobSeekerSchema from "@/models/jobSekeerSchema";
-import UserSchema from "@/models/userSchema";
 
 export const checkComplateProfile = (
   user: any

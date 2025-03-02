@@ -1,5 +1,3 @@
-import any from "@/models/loginSchema";
-import UserSchema from "@/models/userSchema";
 import axios from "axios";
 
 export const Login = async (user: any): Promise<any | string> => {

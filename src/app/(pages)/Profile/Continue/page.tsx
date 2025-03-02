@@ -7,7 +7,6 @@ import { uploadImage } from "@/app/services/FileSrevices";
 import EmployerSchema from "@/models/employerSchema";
 import { useRouter } from "next/navigation";
 import { sendProfile } from "@/app/services/ProfileServices";
-import { setTypeUser } from "@/utils/UserUtils";
 
 export default function ContinueProfile() {
   const { user, setUser } = useUser(); // Assuming user is stored in context

@@ -1,6 +1,4 @@
-import LoginSchema from "@/models/loginSchema";
 import { SendApplication } from "@/server/Application";
-import { Login } from "@/server/Auth";
 import { NextResponse } from "next/server";
 
 export const POST = async (req: Request) => {

@@ -1,6 +1,5 @@
 "use client"; // Mark the component as a Client Component
 
-import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation"; // Use useParams instead of useRouter
 import { MdKeyboardBackspace } from "react-icons/md";

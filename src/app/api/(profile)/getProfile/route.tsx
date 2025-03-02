@@ -1,4 +1,3 @@
-import UserSchema from "@/models/userSchema";
 import { GetProfile } from "@/server/Profile";
 import { NextResponse } from "next/server";
 
