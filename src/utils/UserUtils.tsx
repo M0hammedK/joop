@@ -4,15 +4,15 @@ import UserSchema from "@/models/userSchema";
 
 export const setTypeUser = (
   user: UserSchema,
-  profile: JobSeekerSchema | EmployerSchema
+  profile: any
 ): EmployerSchema | JobSeekerSchema | null => {
   switch (user.role) {
     case "JOB_SEEKER":
-      const { resume, skills } = profile as JobSeekerSchema;
+      const { resume, skills } = profile;
       if (JobSeekerSchema.validate({ ...user, resume, skills }) === null)
         return new JobSeekerSchema({ ...user, resume, skills });
     case "EMPLOYER":
-      const { companyWebsite, companyName } = profile as EmployerSchema;
+      const { companyWebsite, companyName } = profile;
       if (
         EmployerSchema.validate({
           ...user,
@@ -25,6 +25,19 @@ export const setTypeUser = (
           companyName,
           companyWebsite: companyWebsite || "http://localhost:3000",
         });
+    default:
+      return null;
+  }
+};
+
+export const restoreUser = (user: any) => {
+  switch (user["role"]) {
+    case "JOB_SEEKER":
+      const { resume, skills } = user;
+      return setTypeUser(user, { resume, skills });
+    case "EMPLOYER":
+      const { companyWebsite, companyName } = user;
+      return setTypeUser(user, { companyWebsite, companyName });
     default:
       return null;
   }

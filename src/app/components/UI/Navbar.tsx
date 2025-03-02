@@ -13,7 +13,6 @@ export default function Navbar() {
   useEffect(() => {
     if (window.screen.width > 640) setIsOpen(true);
   }, []);
-
   return (
     <section className="fixed start-0 top-0 w-[10%] md:w-[30%] lg:w-[20%] h-full z-50 bg-blue-700">
       {/* Menu Button */}

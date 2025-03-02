@@ -46,7 +46,7 @@ export default function JobList() {
     fetchJobs();
   }, [user?.role, user?.id]);
   return (
-    <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 p-6">
+    <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 p-2">
       {jobs.map((job) => (
         <div
           key={job.id}
@@ -68,7 +68,7 @@ export default function JobList() {
             ${job.salary.toLocaleString()} per year
           </p>
 
-          <div className="mt-4 flex justify-between items-center">
+          <div className="mt-4 flex justify-between items-center gap-2">
             <Link
               href={`/JobDetails/${job.id}`}
               className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition"

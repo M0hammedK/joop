@@ -58,6 +58,8 @@ export default function ContinueProfile() {
               Token: localStorage.getItem("Token"),
             })
               .then((profile) => {
+                localStorage.setItem("user", JSON.stringify(jobSeeker));
+
                 setUser(new JobSekeerSchema(jobSeeker));
                 router.push("/");
               })
@@ -77,6 +79,7 @@ export default function ContinueProfile() {
           Token: localStorage.getItem("Token"),
         })
           .then((profile) => {
+            localStorage.setItem("user", JSON.stringify(employer));
             setUser(new EmployerSchema(employer));
             router.push("/");
           })
@@ -118,7 +121,7 @@ export default function ContinueProfile() {
             <input
               type="file"
               name="resume"
-              accept=".pdf,.doc,.docx,.png,.jpg,.jpeg,.svg"
+              accept=".pdf,.png,.jpg,.jpeg"
               onChange={handleFileChange}
               className="w-full p-2 border rounded-md"
               required

@@ -3,7 +3,7 @@ import JobSeekerSchema from "@/models/jobSekeerSchema";
 import UserSchema from "@/models/userSchema";
 
 export const checkComplateProfile = (
-  user: UserSchema
+  user: any
 ): boolean => {
   try {
     switch (user.role) {

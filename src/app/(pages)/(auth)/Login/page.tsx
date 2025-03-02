@@ -27,17 +27,18 @@ export default function LoginPage() {
     if (loginValidate) setError(loginValidate);
     else {
       await Login(newData).then((user) => {
-
         if (user["role"]) {
           checkFirstTime(localStorage.getItem("Token"))
             .then((profile) => {
               if (profile !== "notfound") {
-                setUser(setTypeUser(user, profile));
-                setIsSubmitting(false); 
+                const newUser = setTypeUser(user, profile);
+                localStorage.setItem("user", JSON.stringify(newUser));
+                setUser(newUser);
+                setIsSubmitting(false);
                 router.push("/");
               } else {
                 setUser(user);
-                setIsSubmitting(false); 
+                setIsSubmitting(false);
                 router.push("/Profile/Continue");
               }
             })
@@ -59,7 +60,11 @@ export default function LoginPage() {
           isSubmitting={isSubmitting}
         />
 
-        {error && <h3 className="text-red-600">{`${error}`}</h3>}
+        {error && (
+          <h3 className="text-red-600">
+            {Array.isArray(error) ? error.join(", ") : String(error)}
+          </h3>
+        )}
       </div>
     </div>
   );

@@ -22,16 +22,16 @@ export const UploadImage = (req: any) => {
       if (!existsSync(uploadDir)) {
         await fs.mkdir(uploadDir, { recursive: true });
       }
-
+      const filetype: string[] = file.name.split(".");
       // Generate a unique file path
-      const filename = `${type}-${email}.png`;
+      const filename = `${type}-${email}.${filetype[filetype.length - 1]}`;
       const filepath = path.join(uploadDir, filename);
 
       // Save the raw file
       await fs.writeFile(filepath, buffer);
 
       // Resolve promise with the image URL
-      resolve(`/uploads/${type}/${filename}`);
+      resolve(`/uploads/${type}s/${filename}`);
     } catch (error) {
       reject(error);
     }

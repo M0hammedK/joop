@@ -12,23 +12,20 @@ export default function RegisterPage() {
   const [error, setError] = useState<string[] | null | string>(null);
   const router = useRouter();
 
-const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-const handleRegister = async (
-
+  const handleRegister = async (
     e: React.FormEvent<HTMLFormElement>,
     data: any,
     image: Blob | null
-  ): Promise<void> =>
-    {
-    setIsSubmitting(true); 
+  ): Promise<void> => {
+    setIsSubmitting(true);
 
     e.preventDefault();
     setError(null);
     const registerValidate = checkRegiterCredentials(data);
     if (!registerValidate) {
-      uploadImage(image, data["email"], 'image').then((res) => {
-
+      uploadImage(image, data["email"], "image").then((res) => {
         if (res.split("/").length === 4) {
           const { repeatPassword, ...rest } = data;
 
@@ -51,9 +48,17 @@ const handleRegister = async (
     <div className="h-full items-end">
       <div className="p-6 flex flex-col items-center bg-gray-100 rounded-lg shadow-lg w-full max-w-md mx-auto">
         <h2 className="text-xl font-semibold mb-4">Sign Up</h2>
-        <AuthForm type="register" onSubmit={handleRegister} isSubmitting={isSubmitting} />
+        <AuthForm
+          type="register"
+          onSubmit={handleRegister}
+          isSubmitting={isSubmitting}
+        />
 
-        {error && <h3 className="text-red-600">{error}</h3>}
+        {error && (
+          <h3 className="text-red-600">
+            {Array.isArray(error) ? error.join(", ") : String(error)}
+          </h3>
+        )}
       </div>
     </div>
   );

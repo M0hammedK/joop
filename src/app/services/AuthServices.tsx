@@ -19,6 +19,7 @@ export const Login = async (user: any) => {
       if (res.data === "Invalid User") return (response = res.data);
       response = res.data["data"];
       localStorage.setItem("Token", res.data["token"]);
+      localStorage.setItem("user", JSON.stringify(res.data['data']));
     })
     .catch((error: any) => {
       response = error.message;
@@ -60,19 +61,4 @@ export const checkFirstTime = async (token: any) => {
   return response;
 };
 
-export const RestoreSession = async (
-  token: string
-): Promise<UserSchema | JobSeekerSchema | EmployerSchema | null> => {
-  let user: UserSchema | null = null;
-  let fullUser: JobSeekerSchema | EmployerSchema | null = null;
-  await getUser(token).then((res) => {
-    if (res !== "notfound") user = new UserSchema(res);
-  });
-  await checkFirstTime(localStorage.getItem("Token")).then((profile) => {
-    if (profile !== "notfound") {
-      fullUser = setTypeUser(user!, profile);
-    }
-  });
-  if (fullUser) return fullUser;
-  else return user;
-};
+

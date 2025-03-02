@@ -37,3 +37,24 @@ export const SendProfile = async (
     });
   return response!;
 };
+
+export const UpadetProfile = async (
+  user: any,
+  token: any
+): Promise<any | string> => {
+  let response: any | string;
+  await axios
+    .put(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/profile`, user, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then((res: any) => {
+      response = res.data;
+    })
+    .catch((err: any) => {
+      response = err;
+    });
+  return response!;
+};

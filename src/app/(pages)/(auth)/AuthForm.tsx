@@ -69,7 +69,7 @@ export default function AuthForm({ type, onSubmit }: Props) {
           <input
             id="profileImage"
             type="file"
-            accept=".png,.jpg,.jpeg,.svg"
+            accept=".png,.jpg,.jpeg"
             className="hidden"
             onChange={(e: any) => setImage(e.target.files?.[0])}
           />
