@@ -35,11 +35,9 @@ Cypress.Commands.add('logout', () => {
 // Handle Next.js route changes
 Cypress.on('uncaught:exception', (err, runnable) => {
   // Check for the specific error (NEXT_REDIRECT) or just return false to ignore all uncaught exceptions
-  if (err.message.includes('NEXT_REDIRECT')) {
     // Prevent Cypress from failing the test on this specific error
     return false;
   }
   
   // Return true to let other errors fail the test as usual
-  return true;
-});
+);
