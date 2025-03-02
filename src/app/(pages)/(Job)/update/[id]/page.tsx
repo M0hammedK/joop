@@ -90,7 +90,7 @@ export default function EditJobPage() {
       );
       if (response.status === 200) {
         console.log("Job updated successfully!");
-        window.location.href = "/job"; // Redirect after successful update
+        window.location.href = `/JobDetails/${id}`; // Redirect after successful update
       }
     } catch (error) {
       console.error("Error updating job:", error);

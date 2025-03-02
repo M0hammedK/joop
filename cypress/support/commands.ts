@@ -1,37 +1,45 @@
 /// <reference types="cypress" />
-// ***********************************************
-// This example commands.ts shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
-//
-//
-// -- This is a parent command --
-// Cypress.Commands.add('login', (email, password) => { ... })
-//
-//
-// -- This is a child command --
-// Cypress.Commands.add('drag', { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add('dismiss', { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This will overwrite an existing command --
-// Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
-//
-// declare global {
-//   namespace Cypress {
-//     interface Chainable {
-//       login(email: string, password: string): Chainable<void>
-//       drag(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
-//       dismiss(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
-//       visit(originalFn: CommandOriginalFn, url: string, options: Partial<VisitOptions>): Chainable<Element>
-//     }
-//   }
-// }
+
+declare namespace Cypress {
+  interface Chainable {
+    loginAsEmployer(): Chainable<void>
+    loginAsJobSeeker(): Chainable<void>
+    logout(): Chainable<void>
+  }
+}
+
+// Login as an employer
+Cypress.Commands.add('loginAsEmployer', () => {
+  cy.visit('/Login');
+  cy.get('input[name="email"]').type('a@gmail.com');
+  cy.get('input[name="password"]').type('123123');
+  cy.get('button[type="submit"]').click();
+  cy.location("pathname").should("eq", "/");
+});
+
+// Login as a job seeker
+Cypress.Commands.add('loginAsJobSeeker', () => {
+  cy.visit('/Login');
+  cy.get('input[name="email"]').type('seeker@gmail.com');
+  cy.get('input[name="password"]').type('123123');
+  cy.get('button[type="submit"]').click();
+  cy.location("pathname").should("eq", "/");
+});
+
+// Logout
+Cypress.Commands.add('logout', () => {
+  cy.contains('Logout').click();
+  cy.url().should('not.include', '/Profile');
+});
+
+// Handle Next.js route changes
+Cypress.on('uncaught:exception', (err, runnable) => {
+  // Check for the specific error (NEXT_REDIRECT) or just return false to ignore all uncaught exceptions
+  if (err.message.includes('NEXT_REDIRECT')) {
+    // Prevent Cypress from failing the test on this specific error
+    return false;
+  }
+  
+  // Return true to let other errors fail the test as usual
+  return true;
+});
