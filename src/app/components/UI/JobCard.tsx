@@ -19,8 +19,6 @@ export default function JobList() {
     }>
   >([]);
 
- 
-
   useEffect(() => {
     const fetchJobs = async () => {
       try {
@@ -41,11 +39,8 @@ export default function JobList() {
         }
 
         const response = await axios.get(url, { headers });
-        console.log("fetched jobs:", response.data);
         setJobs(response.data);
-      } catch (error) {
-        console.error("Error fetching jobs:", error);
-      }
+      } catch (error) {}
     };
 
     fetchJobs();

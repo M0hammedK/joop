@@ -13,11 +13,11 @@ export default function LoginPage() {
   const { setUser } = useUser();
   const router = useRouter();
 
-const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-const handleLogin = async (e: any, data: any): Promise<any> => {
-  e.preventDefault();
-  setIsSubmitting(true); // Set loading state to true
+  const handleLogin = async (e: any, data: any): Promise<any> => {
+    e.preventDefault();
+    setIsSubmitting(true); // Set loading state to true
 
     e.preventDefault();
     setError(null);
@@ -33,7 +33,6 @@ const handleLogin = async (e: any, data: any): Promise<any> => {
           checkFirstTime(localStorage.getItem("Token"))
             .then((profile) => {
               if (profile !== "notfound") {
-                console.log(setTypeUser(user, profile))
                 setUser(setTypeUser(user, profile));
                 router.push("/");
               } else {
@@ -53,7 +52,11 @@ const handleLogin = async (e: any, data: any): Promise<any> => {
     <div className="h-full items-end">
       <div className="p-6 flex flex-col items-center bg-gray-100 rounded-lg shadow-lg w-full max-w-md mx-auto">
         <h2 className="text-xl font-semibold mb-4">Sign In</h2>
-        <AuthForm type="login" onSubmit={handleLogin} isSubmitting={isSubmitting} />
+        <AuthForm
+          type="login"
+          onSubmit={handleLogin}
+          isSubmitting={isSubmitting}
+        />
 
         {error && <h3 className="text-red-600">{`${error}`}</h3>}
       </div>

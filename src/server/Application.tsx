@@ -26,3 +26,4 @@ export const SendApplication = async (
     });
   return response!;
 };
+

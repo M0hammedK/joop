@@ -1,6 +1,11 @@
+import EmployerSchema from "@/models/employerSchema";
+import JobSeekerSchema from "@/models/jobSekeerSchema";
 import LoginSchema from "@/models/loginSchema";
 import RegisterSchema from "@/models/registerSchema";
+import UserSchema from "@/models/userSchema";
+import { setTypeUser } from "@/utils/UserUtils";
 import axios from "axios";
+import { getUser } from "./UserServices";
 
 export const Login = async (user: any) => {
   let response: any;
@@ -53,4 +58,21 @@ export const checkFirstTime = async (token: any) => {
       response = error;
     });
   return response;
+};
+
+export const RestoreSession = async (
+  token: string
+): Promise<UserSchema | JobSeekerSchema | EmployerSchema | null> => {
+  let user: UserSchema | null = null;
+  let fullUser: JobSeekerSchema | EmployerSchema | null = null;
+  await getUser(token).then((res) => {
+    if (res !== "notfound") user = new UserSchema(res);
+  });
+  await checkFirstTime(localStorage.getItem("Token")).then((profile) => {
+    if (profile !== "notfound") {
+      fullUser = setTypeUser(user!, profile);
+    }
+  });
+  if (fullUser) return fullUser;
+  else return user;
 };
