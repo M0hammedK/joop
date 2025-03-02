@@ -27,16 +27,22 @@ export default function LoginPage() {
     if (loginValidate) setError(loginValidate);
     else {
       await Login(newData).then((user) => {
-        setIsSubmitting(false); // Reset loading state after login
 
         if (user["role"]) {
           checkFirstTime(localStorage.getItem("Token"))
             .then((profile) => {
               if (profile !== "notfound") {
+<<<<<<< HEAD
+=======
+                console.log(setTypeUser(user, profile))
+                
+>>>>>>> d6467969bcfd0da29841f9f954c6ad84f5320935
                 setUser(setTypeUser(user, profile));
+                setIsSubmitting(false); 
                 router.push("/");
               } else {
                 setUser(user);
+                setIsSubmitting(false); 
                 router.push("/Profile/Continue");
               }
             })

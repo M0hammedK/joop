@@ -44,7 +44,6 @@ export default function JobDetails() {
   }
 
   const isJobOwner = user?.id === job?.employerId; // Check if the current user is the job owner
-  console.log(isJobOwner)
   // Handle delete request
   const handleDelete = async () => {
     try {
