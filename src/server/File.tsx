@@ -1,7 +1,4 @@
 import { requestToBuffer } from "@/utils/FileUtils";
-import fs from "fs/promises";
-import { existsSync } from "fs";
-import path from "path";
 import { put } from "@vercel/blob";
 
 export const config = {
@@ -19,16 +16,23 @@ export const UploadImage = (req: any) => {
       if (!file) {
         reject({ error: "No file uploaded", status: 400 });
       }
+      const buffer = await requestToBuffer(file);
 
       const filetype: string[] = file.name.split(".");
+
       // Generate a unique file path
       const filename = `${type}-${email}.${filetype[filetype.length - 1]}`;
+
       // Upload file to Vercel Blob
-      const blob = await put(filename, file, { access: "public" });
+      const blob = await put(filename.replace("@", "_"), buffer, {
+        access: "public",
+      });
+
+      console.log(blob);
 
       resolve(blob.url);
     } catch (error) {
-      reject({ error: "Upload failed", status: 500 });
+      reject({ error: "Upload failed", status: 400 });
     }
   });
 };

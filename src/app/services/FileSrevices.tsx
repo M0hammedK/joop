@@ -6,7 +6,8 @@ export const uploadImage = async (
   type: string
 ): Promise<string> => {
   let response;
-  if (!image) return "/uploads/images/defaultImage.svg";
+  if (!image)
+    return "https://esoedmdnu28jvzvz.public.blob.vercel-storage.com/defaultImage.jpg";
   const formData = new FormData();
   formData.append("file", image);
   formData.append("email", email);

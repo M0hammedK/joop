@@ -7,8 +7,7 @@ interface Props {
   isSubmitting: boolean; // Added isSubmitting prop
 
   type: string;
-      onSubmit: ( 
-
+  onSubmit: (
     e: React.FormEvent<HTMLFormElement>,
     { email, password, repeatPassword, name, role }: any,
     image: Blob | null
@@ -22,7 +21,7 @@ export default function AuthForm({ type, onSubmit }: Props) {
   const [name, setName] = useState("");
   const [image, setImage] = useState<Blob | null>(null);
   const [preview, setPreviw] = useState<string>(
-    "/uploads/images/defaultImage.svg"
+    "https://esoedmdnu28jvzvz.public.blob.vercel-storage.com/defaultImage.jpg"
   );
   const [repeatPassword, setRepeatPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -37,10 +36,10 @@ export default function AuthForm({ type, onSubmit }: Props) {
 
   return (
     <form
-      onSubmit={async (e: React.FormEvent<HTMLFormElement>) => {
+      onSubmit={ (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setIsSubmitting(true); // Set submitting state to true
-        await onSubmit(
+         onSubmit(
           e,
           {
             email,
@@ -58,7 +57,7 @@ export default function AuthForm({ type, onSubmit }: Props) {
       {type === "register" && (
         <div className="mb-4">
           <label htmlFor="profileImage" className="cursor-pointer">
-            <Image
+            <img
               src={preview}
               alt="Profile Picture"
               width={120}
@@ -145,7 +144,11 @@ export default function AuthForm({ type, onSubmit }: Props) {
         className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-50"
         disabled={isSubmitting}
       >
-        {isSubmitting ?  "Submitting..." : (type === "register" ? "Sign Up" : "Sign In")}
+        {isSubmitting
+          ? "Submitting..."
+          : type === "register"
+          ? "Sign Up"
+          : "Sign In"}
       </button>
     </form>
   );

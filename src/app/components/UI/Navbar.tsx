@@ -39,15 +39,18 @@ export default function Navbar() {
         <div className="flex flex-col items-center h-full w-full justify-between">
           {/* Profile Section */}
           <div className="flex flex-col items-center w-full">
-            <Link href={user? "/Profile": "/"}>
-            <Image
-              src={user?.imagePath || "/uploads/images/defaultImage.svg"}
-              alt="Profile Picture"
-              width={100}
-              height={100}
-              className="image"
+            <Link href={user ? "/Profile" : "/"}>
+              <img
+                src={
+                  user?.imagePath ||
+                  "https://esoedmdnu28jvzvz.public.blob.vercel-storage.com/defaultImage.jpg"
+                }
+                alt="Profile Picture"
+                width={100}
+                height={100}
+                className="image"
               />
-              </Link>
+            </Link>
             <h3 className="mt-3 text-lg font-semibold">
               {user?.name || "JooP"}
             </h3>
@@ -60,7 +63,10 @@ export default function Navbar() {
                 ...(user?.role === "JOB_SEEKER"
                   ? [{ label: "Your Applications", path: "/All" }]
                   : user?.role === "EMPLOYER"
-                  ? [{ label: "Add Job", path: "/Create" }, { label: "Your Applications", path: "/All" }]
+                  ? [
+                      { label: "Add Job", path: "/Create" },
+                      { label: "Your Applications", path: "/All" },
+                    ]
                   : []),
               ].map(({ label, path }) => (
                 <li
