@@ -27,7 +27,7 @@ export default function RegisterPage() {
     if (!registerValidate) {
       uploadImage(image, data["email"], "image").then((res) => {
         console.log(res)
-        if (res.includes('image-')) {
+        if (res.includes('https://')) {
           const { repeatPassword, ...rest } = data;
 
           Register({ ...rest, imagePath: res })
