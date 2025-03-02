@@ -35,6 +35,7 @@ export default function ContinueProfile() {
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    console.log(formData.resume);
     e.preventDefault(); // Ensure default form submission is prevented
     setError(null);
 
@@ -43,7 +44,7 @@ export default function ContinueProfile() {
         setError("You have to upload a resume");
         return;
       }
-
+      console.log(formData.skills);
       try {
         await uploadImage(formData.resume, user.email, "resume").then((res) => {
           const jobSeeker = {
