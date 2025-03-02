@@ -14,7 +14,7 @@ export default function ApplyButton({ jobId }: Props) {
       href={`/Applying/${jobId}`}
       className={`${
         user?.role === "JOB_SEEKER" ? "block" : "hidden"
-      } w-full bg-blue-600 text-slate-100 hover:text-blue-600 hover:bg-slate-100`}
+      } px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition`}
     >
       Apply Now!
     </Link>

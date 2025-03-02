@@ -5,7 +5,15 @@ import { checkComplateProfile } from "@/utils/ProfileUtils";
 import { redirect } from "next/navigation";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { FiBriefcase, FiUser, FiMail, FiCalendar, FiClock, FiCheck, FiX } from "react-icons/fi";
+import {
+  FiBriefcase,
+  FiUser,
+  FiMail,
+  FiCalendar,
+  FiClock,
+  FiCheck,
+  FiX,
+} from "react-icons/fi";
 
 // Function to fetch all jobs posted by the employer
 const fetchJobs = async (userId: number, token: string) => {
@@ -54,7 +62,7 @@ const fetchJobSeekerApplications = async (userId: number, token: string) => {
         },
       }
     );
-    console.log(response.data)
+    console.log(response.data);
     return response.data;
   } catch (error) {
     console.error("Error fetching job seeker's applications:", error);
@@ -122,10 +130,12 @@ export default function AllApplications() {
               });
             });
           } else if (user.role === "JOB_SEEKER") {
-            fetchJobSeekerApplications(user.id!, token).then((applicationsForSeeker) => {
-              setApplications(applicationsForSeeker);
-              setLoading(false);
-            });
+            fetchJobSeekerApplications(user.id!, token).then(
+              (applicationsForSeeker) => {
+                setApplications(applicationsForSeeker);
+                setLoading(false);
+              }
+            );
           }
         } else {
           redirect("/Login");
@@ -203,23 +213,26 @@ export default function AllApplications() {
               <div className="p-6 space-y-4 flex flex-col items-start gap-4">
                 {/* Stacked Vertical Data with Icons */}
                 <h2 className="text-lg font-semibold text-gray-800 mb-2 flex items-center gap-2">
-                  <FiBriefcase /> {application.jobTitle || `Role :${application.job.title}`}
+                  <FiBriefcase />{" "}
+                  {application.jobTitle || `Role :${application.job.title}`}
                 </h2>
                 <p className="text-md text-gray-700 font-bold mb-1 flex items-center gap-2">
-                  <FiUser />   {application.jobSeeker?.name ? `Name: ${application.jobSeeker.name}` : `Company: ${application.job.company}`}
+                  <FiUser />{" "}
+                  {application.jobSeeker?.name
+                    ? `Name: ${application.jobSeeker.name}`
+                    : `Company: ${application.job.company}`}
                 </p>
                 <p className="text-sm text-gray-600 font-bold mb-3 flex items-center gap-2">
                   {application.jobSeeker?.email ? (
-                  <>
-                    <FiMail /> Email: {application.jobSeeker.email}
-                  </>
+                    <>
+                      <FiMail /> Email: {application.jobSeeker.email}
+                    </>
                   ) : (
-                  <span className="ml-auto flex items-center gap-2">
-                  <FiBriefcase /> {application.job.description}
-                  </span>
+                    <span className="ml-auto flex items-center gap-2">
+                      <FiBriefcase /> {application.job.description}
+                    </span>
                   )}
                 </p>
-                
 
                 {/* Status and Date aligned to the right with Icons */}
                 <div className="flex justify-end mb-4 w-full">
@@ -243,42 +256,50 @@ export default function AllApplications() {
                       {application.status}
                     </span>
                     <p className="text-sm text-gray-500 mt-1 flex items-center gap-1">
-                      <FiCalendar /> {new Date(application.createdAt || Date.now()).toLocaleDateString()}
+                      <FiCalendar />{" "}
+                      {new Date(
+                        application.createdAt || Date.now()
+                      ).toLocaleDateString()}
                     </p>
                   </div>
                 </div>
 
                 {/* Action Buttons with Icons */}
-                {user?.role === "EMPLOYER" && application.status === "PENDING" && (
-                  <div className="flex flex-col sm:flex-row gap-2">
-                    <button
-                      onClick={() => handleStatusUpdate(application.id, "ACCEPTED")}
-                      disabled={updating === application.id}
-                      className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-                    >
-                      {updating === application.id ? (
-                        "Processing..."
-                      ) : (
-                        <>
-                          <FiCheck /> Accept Application
-                        </>
-                      )}
-                    </button>
-                    <button
-                      onClick={() => handleStatusUpdate(application.id, "REJECTED")}
-                      disabled={updating === application.id}
-                      className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-                    >
-                      {updating === application.id ? (
-                        "Processing..."
-                      ) : (
-                        <>
-                          <FiX /> Reject Application
-                        </>
-                      )}
-                    </button>
-                  </div>
-                )}
+                {user?.role === "EMPLOYER" &&
+                  application.status === "PENDING" && (
+                    <div className="flex flex-col sm:flex-row gap-2">
+                      <button
+                        onClick={() =>
+                          handleStatusUpdate(application.id, "ACCEPTED")
+                        }
+                        disabled={updating === application.id}
+                        className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                      >
+                        {updating === application.id ? (
+                          "Processing..."
+                        ) : (
+                          <>
+                            <FiCheck /> Accept Application
+                          </>
+                        )}
+                      </button>
+                      <button
+                        onClick={() =>
+                          handleStatusUpdate(application.id, "REJECTED")
+                        }
+                        disabled={updating === application.id}
+                        className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                      >
+                        {updating === application.id ? (
+                          "Processing..."
+                        ) : (
+                          <>
+                            <FiX /> Reject Application
+                          </>
+                        )}
+                      </button>
+                    </div>
+                  )}
               </div>
             </div>
           ))

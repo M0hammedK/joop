@@ -11,7 +11,7 @@ export default function Applying() {
   const router = useRouter();
 
   if (user) {
-    if (!checkComplateProfile(user)) redirect("/Profile/Continue");
+    if (!checkComplateProfile(user)) router.push("/Profile/Continue");
   } else router.push("/");
   const { id } = useParams();
   useEffect(() => {

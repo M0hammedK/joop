@@ -22,6 +22,7 @@ export default function Home() {
     updateUser();
     if (user) if (!checkComplateProfile(user)) redirect("/Profile/Continue");
   }, []);
+  console.log(user)
   if (user) if (!checkComplateProfile(user)) redirect("/Profile/Continue");
   return (
     <section className="p-6 flex flex-col w-full">
