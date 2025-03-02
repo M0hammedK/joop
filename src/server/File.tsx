@@ -1,7 +1,5 @@
 import { requestToBuffer } from "@/utils/FileUtils";
-import fs from "fs/promises";
-import { existsSync } from "fs";
-import path from "path";
+import { put } from "@vercel/blob";
 
 export const config = {
   api: { bodyParser: false },
@@ -14,26 +12,19 @@ export const UploadImage = (req: any) => {
       const file = formData.get("file") as File;
       const email = formData.get("email") as string;
       const type = formData.get("type") as string;
-      // Convert request to Buffer
-      const buffer = await requestToBuffer(file);
 
-      // Ensure upload directory exists
-      const uploadDir = path.join(process.cwd(), `public/uploads/${type}s`);
-      if (!existsSync(uploadDir)) {
-        await fs.mkdir(uploadDir, { recursive: true });
+      if (!file) {
+        reject({ error: "No file uploaded", status: 400 });
       }
-      const filetype: string[] = file.name.split(".");
-      // Generate a unique file path
-      const filename = `${type}-${email}.${filetype[filetype.length - 1]}`;
-      const filepath = path.join(uploadDir, filename);
+      // const buffer = await requestToBuffer(file);
+      const fileBuffer = Buffer.from(await file.arrayBuffer());
 
-      // Save the raw file
-      await fs.writeFile(filepath, buffer);
-
-      // Resolve promise with the image URL
-      resolve(`/uploads/${type}s/${filename}`);
+      // Upload file to Vercel Blob
+      const blob = await put(file.name, fileBuffer, {
+        access: "public",
+      });
     } catch (error) {
-      reject(error);
+      reject({ error: "Upload failed", status: 400 });
     }
   });
 };

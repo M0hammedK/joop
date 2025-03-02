@@ -12,7 +12,8 @@ export const checkRegiterCredentials = (
   const { repeatPassword: repeat, ...rest }: any = data;
   const validateRegister = RegisterSchema.validate({
     ...rest,
-    imagePath: "/uploads/images/defaultImage.svg",
+    imagePath:
+      "https://esoedmdnu28jvzvz.public.blob.vercel-storage.com/defaultImage.jpg",
   });
   if (validateRegister) return validateRegister;
   return null;
@@ -20,4 +21,4 @@ export const checkRegiterCredentials = (
 
 export const logout = () => {
   localStorage.clear();
-}
+};
