@@ -19,27 +19,23 @@ export default function RegisterPage() {
     data: any,
     image: Blob | null
   ): Promise<void> => {
-    setIsSubmitting(true);
-
     e.preventDefault();
+    setIsSubmitting(true);
     setError(null);
     const registerValidate = checkRegiterCredentials(data);
     if (!registerValidate) {
       uploadImage(image, data["email"], "image").then((res) => {
-        console.log(res)
-        if (res.includes('https://')) {
-          const { repeatPassword, ...rest } = data;
+        const { repeatPassword, ...rest } = data;
 
-          Register({ ...rest, imagePath: res })
-            .then((res) => {
-              const registerValidate = RegisterSchema.validate(res);
-              if (!registerValidate) return router.push("/Login");
-              setError(registerValidate);
-            })
-            .catch((err) => {
-              setError(err);
-            });
-        } else setError(res);
+        Register({ ...rest, imagePath: res })
+          .then((res) => {
+            const registerValidate = RegisterSchema.validate(res);
+            if (!registerValidate) return router.push("/Login");
+            setError(registerValidate);
+          })
+          .catch((err) => {
+            setError(err);
+          });
       });
     }
     setError(registerValidate);

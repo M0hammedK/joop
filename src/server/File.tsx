@@ -16,21 +16,13 @@ export const UploadImage = (req: any) => {
       if (!file) {
         reject({ error: "No file uploaded", status: 400 });
       }
-      const buffer = await requestToBuffer(file);
-
-      const filetype: string[] = file.name.split(".");
-
-      // Generate a unique file path
-      const filename = `${type}-${email}.${filetype[filetype.length - 1]}`;
+      // const buffer = await requestToBuffer(file);
+      const fileBuffer = Buffer.from(await file.arrayBuffer());
 
       // Upload file to Vercel Blob
-      const blob = await put(filename.replace("@", "_"), buffer, {
+      const blob = await put(file.name, fileBuffer, {
         access: "public",
       });
-
-      console.log(blob);
-
-      resolve(blob.url);
     } catch (error) {
       reject({ error: "Upload failed", status: 400 });
     }
