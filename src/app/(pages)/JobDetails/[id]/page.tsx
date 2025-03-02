@@ -104,12 +104,13 @@ export default function JobDetails() {
         {/* Conditionally render the Edit button only if the current user is the job owner */}
         {isJobOwner && (
           <>
+          <Link href={`/update/${id}`}>
             <button
               className="w-full bg-blue-600 text-slate-100 pl-10 pt-2 rounded-sm pb-2 pr-10 hover:text-blue-600 hover:bg-slate-100"
-              onClick={() => window.location.href = `/update/${id}`}
             >
               Edit
             </button>
+            </Link>
             <button
               className="w-full bg-red-600 text-slate-100 pl-10 pt-2 ml-3 mb-2 rounded-sm pb-2 pr-10 hover:text-red-600 hover:bg-slate-100 mt-2"
               onClick={handleDelete}

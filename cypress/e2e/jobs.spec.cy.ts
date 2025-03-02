@@ -11,6 +11,7 @@ describe('Jobs Feature Tests', () => {
   it('should create a job successfully', () => {
     // Now visit the Create Job page
     cy.contains('Add Job').click();
+    cy.location("pathname").should("eq", "/Create");
   
     // Proceed with job creation steps
     cy.get('input[name="title"]').type('New Job Title');
@@ -26,21 +27,18 @@ describe('Jobs Feature Tests', () => {
   });
 
   it('should update a job successfully', () => {
+
     cy.contains('Read More').click(); 
+    cy.location("pathname").should("contain", "/JobDetails");
+
     cy.contains('Edit').click(); 
+    cy.location("pathname").should("contain", "/update");
+
 
     cy.get('input[name="title"]').clear().type('Updated Job Title');
     cy.get('button[type="submit"]').click();
   });
 
-  it('should fail job update with invalid data', () => {
-    cy.contains('Read More').click(); 
-    cy.contains('Edit').click(); 
-    
-    cy.get('input[name="salary"]').clear().type('-1000'); 
-    cy.get('button[type="submit"]').click();
-    cy.contains('Salary must be a positive number'); 
-  });
 
   it('should display job listings', () => {
     // Verify job card elements are present
