@@ -17,10 +17,10 @@ export const UploadImage = (req: any) => {
         reject({ error: "No file uploaded", status: 400 });
       }
       // const buffer = await requestToBuffer(file);
-      const fileBuffer = Buffer.from(await file.arrayBuffer());
+      // const fileBuffer = Buffer.from(await file.arrayBuffer());
 
       // Upload file to Vercel Blob
-      const blob = await put(file.name, fileBuffer, {
+      const blob = await put(file.name, file, {
         access: "public",
       });
     } catch (error) {

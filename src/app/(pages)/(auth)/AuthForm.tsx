@@ -36,10 +36,10 @@ export default function AuthForm({ type, onSubmit }: Props) {
 
   return (
     <form
-      onSubmit={ (e: React.FormEvent<HTMLFormElement>) => {
+      onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setIsSubmitting(true); // Set submitting state to true
-         onSubmit(
+        onSubmit(
           e,
           {
             email,
@@ -65,13 +65,13 @@ export default function AuthForm({ type, onSubmit }: Props) {
               className="image"
             />
           </label>
-          <input
+          {/* <input
             id="profileImage"
             type="file"
             accept=".png,.jpg,.jpeg"
             className="hidden"
             onChange={(e: any) => setImage(e.target.files?.[0])}
-          />
+          /> */}
         </div>
       )}
       {type === "register" && (
