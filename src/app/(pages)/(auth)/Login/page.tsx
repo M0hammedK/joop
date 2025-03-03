@@ -10,16 +10,15 @@ import { setTypeUser } from "@/utils/UserUtils";
 
 export default function LoginPage() {
   const [error, setError] = useState<string | string[] | null>(null);
-  const { setUser } = useUser();
+  const { user, setUser } = useUser();
   const router = useRouter();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+  if(user) router.push('/')
   const handleLogin = async (e: any, data: any): Promise<any> => {
     e.preventDefault();
     setIsSubmitting(true); // Set loading state to true
 
-    e.preventDefault();
     setError(null);
     const { email, password } = data;
     const newData = { email, password };

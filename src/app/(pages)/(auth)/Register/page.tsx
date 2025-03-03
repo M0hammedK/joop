@@ -7,12 +7,14 @@ import RegisterSchema from "@/models/registerSchema";
 import { Register } from "@/app/services/AuthServices";
 import { checkRegiterCredentials } from "@/utils/AuthUtils";
 import { uploadImage } from "@/app/services/FileSrevices";
+import { useUser } from "@/app/components/contexts/UserContext";
 
 export default function RegisterPage() {
   const [error, setError] = useState<string[] | null | string>(null);
   const router = useRouter();
-
+  const { user } = useUser();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  if (user) router.push("/");
 
   const handleRegister = async (
     e: React.FormEvent<HTMLFormElement>,
@@ -30,6 +32,7 @@ export default function RegisterPage() {
         Register({ ...rest, imagePath: res })
           .then((res) => {
             const registerValidate = RegisterSchema.validate(res);
+            setIsSubmitting(false);
             if (!registerValidate) return router.push("/Login");
             setError(registerValidate);
           })
