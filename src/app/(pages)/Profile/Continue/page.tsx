@@ -1,20 +1,19 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useUser } from "../../../components/contexts/UserContext";
-import JobSekeerSchema from "@/models/jobSekeerSchema";
-import { uploadImage } from "@/app/services/FileSrevices";
-import EmployerSchema from "@/models/employerSchema";
+import JobSeekerSchema from "@/models/jobSekeerSchema";
 import { useRouter } from "next/navigation";
 import { sendProfile } from "@/app/services/ProfileServices";
+import EmployerSchema from "@/models/employerSchema";
 
 export default function ContinueProfile() {
-  const { user, setUser } = useUser(); // Assuming user is stored in context
-  const [error, setError] = useState<string | string[] | null>(null); // Assuming user is stored in context
+  const { user, setUser } = useUser();
+  const [error, setError] = useState<string | string[] | null>(null);
   const [formData, setFormData] = useState({
     companyName: "",
     website: "",
-    resume: null,
+    resume: "",
     skills: "",
   });
   const router = useRouter();
@@ -25,74 +24,60 @@ export default function ContinueProfile() {
     }
   }, [user, router]);
 
-  const handleChange = (e: any) => {
+  const handleChange = useCallback((e: any) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
-
-  const handleFileChange = (e: any) => {
-    setFormData({ ...formData, resume: e.target.files[0] });
-  };
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault(); // Ensure default form submission is prevented
+    e.preventDefault();
     setError(null);
 
-    if (user?.role === "JOB_SEEKER") {
-      if (!formData.resume) {
-        setError("You have to upload a resume");
-        return;
-      }
+    try {
+      if (user?.role === "JOB_SEEKER") {
+        if (!formData.resume.trim()) {
+          setError("You have to write a description");
+          return;
+        }
 
-      try {
-        await uploadImage(formData.resume, user.email, "resume").then((res) => {
-          const jobSeeker = {
-            ...user,
-            resume: res,
-            skills: formData.skills,
-          };
-          if (JobSekeerSchema.validate(jobSeeker) === null)
-            sendProfile({
-              user: jobSeeker,
-              Token: localStorage.getItem("Token"),
-            })
-              .then((profile) => {
-                localStorage.setItem("user", JSON.stringify(jobSeeker));
+        const jobSeeker = { ...user, resume: formData.resume, skills: formData.skills };
 
-                setUser(new JobSekeerSchema(jobSeeker));
-                router.push("/");
-              })
-              .catch((err) => setError(err));
-        }); // Await file upload
-      } catch (err) {
-        console.log(err);
-        setError("failed to upload resume");
-      }
-    } else if (user?.role === "EMPLOYER") {
-      const employer = { ...user, ...formData };
-      const employerValidate = EmployerSchema.validate(employer);
+        const validationError = JobSeekerSchema.validate(jobSeeker);
+        if (validationError) {
+          setError(validationError);
+          return;
+        }
 
-      if (employerValidate === null) {
-        sendProfile({
-          user: employer,
-          Token: localStorage.getItem("Token"),
-        })
-          .then((profile) => {
-            localStorage.setItem("user", JSON.stringify(employer));
-            setUser(new EmployerSchema(employer));
-            router.push("/");
-          })
-          .catch((err) => setError(err));
-      } else {
-        setError(employerValidate);
+        await sendProfile({ user: jobSeeker, Token: localStorage.getItem("Token") });
+
+        localStorage.setItem("user", JSON.stringify(jobSeeker));
+        setUser(new JobSeekerSchema(jobSeeker));
+        router.push("/");
+      } else if (user?.role === "EMPLOYER") {
+        const employer = { ...user, ...formData };
+        const employerValidate = EmployerSchema.validate(employer);
+
+        if (employerValidate) {
+          setError(employerValidate);
+          return;
+        }
+
+        await sendProfile({ user: employer, Token: localStorage.getItem("Token") });
+
+        localStorage.setItem("user", JSON.stringify(employer));
+        setUser(new EmployerSchema(employer));
+        router.push("/");
       }
+    } catch (err) {
+      console.error(err);
+      setError("Something went wrong.");
     }
   };
 
   return (
     <div className="flex flex-col max-w-lg mx-auto p-6 bg-white shadow-md rounded-xl mt-10">
       <h1 className="text-4xl mb-4">Final Step {user?.name}</h1>
-      <h3 className="mb-4">you have to Complete Your Profile first</h3>
+      <h3 className="mb-4">You have to complete your profile first</h3>
       <form onSubmit={handleSubmit} className="space-y-4">
         {user?.role === "EMPLOYER" ? (
           <>
@@ -117,12 +102,13 @@ export default function ContinueProfile() {
           </>
         ) : (
           <>
-            <input
-              type="file"
+            <label htmlFor="resume" className="font-semibold">Description</label>
+            <textarea
               name="resume"
-              accept=".pdf,.png,.jpg,.jpeg"
-              onChange={handleFileChange}
-              className="w-full p-2 border rounded-md"
+              value={formData.resume}
+              onChange={handleChange}
+              placeholder="Write about yourself..."
+              className="w-full p-2 border rounded-md h-24 resize-none"
               required
             />
             <input
